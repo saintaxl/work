@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<context:component-scan base-package="com.sap.bnet" >
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/META-INF/sld.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true"></property>
+	</bean>
+
+
+	<bean id="odataClientManagerFactory" class="com.sap.sbo.odatathinclient.ODataClientManagerFactory" factory-method="getODataClientManager">
+		<constructor-arg value="${sldrooturl}" />
+	</bean>
+	
+	<bean id="sldServices" class="com.sap.bnet.sldclient.SldServicesImpl">
+		<property name="sldServiceToken" value="${servicetoken}"/>
+		<property name="odataManager" ref="odataClientManagerFactory"/>
+	</bean>
+	
+	<!-- <bean class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor"/>
+	<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>   -->
+	
+
+	
+	<bean id="trialRequestValidator" class="com.sap.bnet.validator.EmailUniqueValidator">
+		<property name="sldServices" ref="sldServices"/>
+	</bean>
+	 
+	<bean id="passwordValidator" class="com.sap.bnet.validator.PasswordValidator">
+		<property name="sldServices" ref="sldServices"/>
+	</bean> 
+
+
+</beans>

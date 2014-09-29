@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<appender name="log.console" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<appender name="log.file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>c:/applogs/bnet.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>c:/applogs/bnet.log.%d{yyyy-MM-dd}</fileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<logger name="com.sap.bnet">
+		<level value="debug" />
+		<appender-ref ref="log.console" />
+	</logger>
+
+	<logger name="org.apache.axis2">
+		<level value="WARN" />
+		<appender-ref ref="log.console" />
+	</logger>
+
+	<logger name="org.apache.axiom">
+		<level value="WARN" />
+		<appender-ref ref="log.console" />
+	</logger>
+
+	<logger name="httpclient">
+		<level value="WARN" />
+		<appender-ref ref="log.console" />
+	</logger>
+
+	<logger name="org.apache.commons.httpclient">
+		<level value="WARN" />
+		<appender-ref ref="log.console" />
+	</logger>
+
+	<logger name="org.slf4j">
+		<level value="ERROR" />
+		<appender-ref ref="log.file" />
+	</logger>
+
+	<logger name="ch.qos.logback">
+		<level value="error" />
+		<appender-ref ref="log.file" />
+	</logger>
+
+	<logger name="org.springframework">
+		<level value="WARN" />
+		<appender-ref ref="log.file" />
+	</logger>
+
+	<logger name="java.sql">
+		<level value="ERROR" />
+		<appender-ref ref="log.file" />
+	</logger>
+
+	<root>
+		<level value="debug" />
+		<appender-ref ref="log.console" />
+	</root>
+
+</configuration>
