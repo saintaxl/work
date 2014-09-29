@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package>
+	<OPFlag>0104</OPFlag>
+	<SIID>sitest</SIID>
+	<TimeStamp>1254288653</TimeStamp>
+	<ProductID>000001000</ProductID>
+	<Password>489413</Password>
+	<CustID>1321</CustID>
+	<CustAccount>zhant</CustAccount>
+	<Summary>客户查询</Summary>
+</Package>

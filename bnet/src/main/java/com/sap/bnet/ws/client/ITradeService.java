@@ -13,8 +13,10 @@ package com.sap.bnet.ws.client;
  */
 public interface ITradeService {
 
-	public String getPortalRequestRequest(String streamingNo,String randNo);
+	public String getPortalRequest(String streamingNo,String randNo);
 	
 	public String getEncodeString(String decode);
+
+	public String getPortalResult(String resXml);
 	
 }

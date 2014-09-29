@@ -4,6 +4,7 @@
 package com.sap.bnet.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sap.bnet.constant.Operator;
 import com.sap.bnet.services.IOrderServices;
 
 
@@ -46,7 +48,10 @@ public class CallbackController {
 		}
 		
 		try {
-			orderServices.addOrder(order.getStreamingNo(), order.getRand());
+			Map<Operator, Object> result = orderServices.addOrder(order.getStreamingNo(), order.getRand(),order.getEncode());
+			if(result.get(Operator.Redirect) != null){
+				return new ModelAndView("redirect:"+ result.get(Operator.Redirect));
+			}
 		} catch (Exception e) {
 			modelMap.put("errormessage", e);
 			return new ModelAndView("error",modelMap);
