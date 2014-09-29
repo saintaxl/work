@@ -20,19 +20,18 @@ import com.sap.bnet.ws.client.ITradeService;
 @Service
 public class OrderServices implements IOrderServices{
 	
-	@Value("siId")
+	@Value("${productId}")
 	private String siid;
 	
-	@Value("productId")
+	@Value("${bizId}")
 	private String productId;
 	
-	@Value("bizId")
+	@Value("${siId}")
 	private String bizId;
 	
 	@Autowired
 	private ITradeService tradeService;
 
-	@Override
 	public void addOrder(String streamingNo, String rand) {
 		
 		String xml = tradeService.getPortalRequestRequest(streamingNo, rand);

@@ -29,8 +29,8 @@ public class TradeServiceTest extends AbstractJUnit4SpringContextTests {
 	
 	@Before
 	public void before(){
-		System.getProperties().setProperty("http.proxyHost", "10.48.127.169");
-		System.getProperties().setProperty("http.proxyPort", "8080");
+		//System.getProperties().setProperty("http.proxyHost", "10.48.127.169");
+		//System.getProperties().setProperty("http.proxyPort", "8080");
 	}
 	
 	@Resource

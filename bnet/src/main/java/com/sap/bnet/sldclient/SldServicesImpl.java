@@ -42,7 +42,6 @@ public class SldServicesImpl implements SldServices {
         return res;
 	}
 
-	@Override
 	public boolean isEmailUnique(String email) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("Email", email);
@@ -50,7 +49,6 @@ public class SldServicesImpl implements SldServices {
 		return res;
 	}
 
-	@Override
 	public Integer checkUserPassword(TrialRequest target) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		

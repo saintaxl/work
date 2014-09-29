@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
-import org.apache.cxf.common.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,6 @@ public class TradeService implements ITradeService{
 		return xml;
 	}
 
-	@Override
 	public String getEncodeString(String decode) {
 		logger.debug("Call remote service [getEncodeString] para [decode:{}]",decode);
 		OMFactory factory = OMAbstractFactory.getOMFactory();

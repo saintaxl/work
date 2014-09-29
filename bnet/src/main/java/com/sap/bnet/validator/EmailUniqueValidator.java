@@ -26,12 +26,10 @@ public class EmailUniqueValidator implements Validator {
 		this.sldServices = sldServices;
 	}
 
-	@Override
 	public boolean supports(Class<?> clazz) {
 		return TrialRequest.class.equals(clazz);
 	}
 
-	@Override
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "username", null, "Username is empty.");
 		TrialRequest user = (TrialRequest) obj;

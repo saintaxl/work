@@ -3,15 +3,20 @@
  */
 package com.sap.bnet.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.cxf.common.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sap.bnet.services.IOrderServices;
 
 
 /**
@@ -28,15 +33,24 @@ public class CallbackController {
 
 	public Logger logger = LoggerFactory.getLogger(CallbackController.class);
 	
+	@Autowired
+	private IOrderServices orderServices;
+	
 	@RequestMapping("/callback") 
 	public ModelAndView callback(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
 		ModelAndView mv = new ModelAndView();
+		HashMap modelMap = new HashMap();
 		if(StringUtils.isEmpty(order.getStreamingNo()) || StringUtils.isEmpty(order.getRand()) || StringUtils.isEmpty(order.getEncode())){
 			logger.error("Order request is Null [StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
-			mv.setViewName("errorpage");
+			return new ModelAndView("error");
 		}
 		
-		
+		try {
+			orderServices.addOrder(order.getStreamingNo(), order.getRand());
+		} catch (Exception e) {
+			modelMap.put("errormessage", e);
+			return new ModelAndView("error",modelMap);
+		}
 		
 		return mv;
 	}

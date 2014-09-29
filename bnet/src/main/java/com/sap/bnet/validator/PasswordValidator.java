@@ -25,12 +25,10 @@ public class PasswordValidator implements Validator{
 		this.sldServices = sldServices;
 	}
 
-	@Override
 	public boolean supports(Class<?> clazz) {
 		return TrialRequest.class.equals(clazz);
 	}
 
-	@Override
 	public void validate(Object target, Errors errors) {
 		Integer status = sldServices.checkUserPassword((TrialRequest)target);
 		System.out.println(status);
