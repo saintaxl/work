@@ -48,9 +48,9 @@ public class receiveOrderController {
 		}
 		
 		try {
-			Map<Operator, Object> result = orderServices.addOrder(order.getStreamingNo(), order.getRand(),order.getEncode());
-			if(result.get(Operator.Redirect) != null){
-				return new ModelAndView("redirect:"+ result.get(Operator.Redirect));
+			String opflag = orderServices.analysis(order.getStreamingNo(), order.getRand(),order.getEncode());
+			if(opflag.startsWith("http://")){
+				return new ModelAndView("redirect:"+ opflag);
 			}
 		} catch (Exception e) {
 			logger.error("addOrder Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());

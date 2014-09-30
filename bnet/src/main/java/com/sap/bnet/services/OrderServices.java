@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sap.bnet.constant.Operator;
-import com.sap.bnet.controller.receiveOrderController;
 import com.sap.bnet.ws.client.ITradeService;
 
 /**
@@ -30,7 +29,7 @@ import com.sap.bnet.ws.client.ITradeService;
 @Service
 public class OrderServices implements IOrderServices{
 	
-	public Logger logger = LoggerFactory.getLogger(receiveOrderController.class);
+	public Logger logger = LoggerFactory.getLogger(OrderServices.class);
 	
 	@Value("${productId}")
 	private String productId;
@@ -44,26 +43,16 @@ public class OrderServices implements IOrderServices{
 	@Autowired
 	private ITradeService tradeService;
 
-	public Map<Operator,Object> addOrder(String streamingNo, String rand,String encode) {
+	public String analysis(String streamingNo, String rand,String encode) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyymmddhhssmm");
+		String opflag = validation(streamingNo, rand, encode);
+		return opflag;
 		
-		Map<Operator,Object> resMap = new HashMap<Operator, Object>();
-		String xml = tradeService.getPortalRequest(streamingNo, rand);
-		String opflag = StringUtils.substringBetween(xml,"<OPFlag>", "</OPFlag>");
-		String xmlMd5 = tradeService.getEncodeString(xml);
-		if(!encode.equals(xmlMd5)){
-			logger.warn("respone data not match original data");
-			String resXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-					      + "<Package>"
-					      +     "<StreamingNo>" + streamingNo + "</StreamingNo>"
-					      +     "<OPFlag>" + opflag + "</OPFlag>"
-					      +     "<ReturnStatus>00501</ReturnStatus>"
-					      +     "<Summary></Summary>"
-					      + "</Package>";
-			String returnXml = tradeService.getPortalResult(resXml);
-			String redirectUrl = StringUtils.substringBetween(returnXml,"<ReturnUrl>", "</ReturnUrl>");
-			resMap.put(Operator.Redirect, redirectUrl);
-			return resMap;
+		
+		
+		
+	/*	if(!encode.equals(xmlMd5)){
+			
 		}else{
 			if(opflag.equals("0101") || opflag.equals("0102") || opflag.equals("0103")){
 				String customeId = StringUtils.substringBetween(xml,"<CustID>", "</CustID>");
@@ -87,12 +76,37 @@ public class OrderServices implements IOrderServices{
 					
 				}else{
 					//客户开户
-					
+					if(opflag.equals("0101")){
+						
+					}else if(opflag.equals("0102")){//客户变更
+						
+					}else{//客户退订
+						
+					}
 				}
 				
 			}
 		}
-		return resMap;
+		return resMap;*/
+	}
+	
+	private String validation(String streamingNo, String rand,String encode){
+		String xml = tradeService.getPortalRequest(streamingNo, rand);
+		String opflag = StringUtils.substringBetween(xml,"<OPFlag>", "</OPFlag>");
+		String xmlMd5 = tradeService.getEncodeString(xml);
+		if(!encode.equals(xmlMd5)){
+			logger.warn("respone data not match original data");
+			String resXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+					      + "<Package>"
+					      +     "<StreamingNo>" + streamingNo + "</StreamingNo>"
+					      +     "<OPFlag>" + opflag + "</OPFlag>"
+					      +     "<ReturnStatus>00501</ReturnStatus>"
+					      +     "<Summary></Summary>"
+					      + "</Package>";
+			String returnXml = tradeService.getPortalResult(resXml);
+			return StringUtils.substringBetween(returnXml,"<ReturnUrl>", "</ReturnUrl>");
+		}
+		return opflag;
 	}
 
 }
