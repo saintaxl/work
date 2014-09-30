@@ -1,4 +1,4 @@
-package com.sap.bnet;
+package com.sap.bnet.test;
 
 import static org.junit.Assert.assertNotNull;
 

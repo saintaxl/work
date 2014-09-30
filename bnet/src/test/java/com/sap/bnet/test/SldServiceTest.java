@@ -1,7 +1,7 @@
 /**
  * © 2014 SAP AG. All rights reserved.
  */
-package com.sap.bnet;
+package com.sap.bnet.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +25,7 @@ import com.sap.bnet.sldclient.SldServices;
  * @create Sep 28, 2014 2:19:08 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:META-INF/spring/spring-ws.xml")
+@ContextConfiguration(locations = "classpath:META-INF/spring/spring-beans.xml")
 public class SldServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Resource
@@ -36,6 +36,10 @@ public class SldServiceTest extends AbstractJUnit4SpringContextTests {
 		boolean result = sldService.logonByServiceToken();
 		assertNotNull(result);
 		assertEquals(result, true);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("dddd");
 	}
 
 }
