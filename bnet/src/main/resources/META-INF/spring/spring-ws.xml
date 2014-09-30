@@ -8,7 +8,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schema/jaxws.xsd">
 	<import resource="classpath:/META-INF/spring/spring-beans.xml" />
 
 	<bean id="tradeServiceStub" class="com.sap.bnet.ws.stub.ProdServiceServiceStub">
-		<constructor-arg value="http://118.85.200.62/services/TradeService?wsdl" />
+		<constructor-arg value="http://118.85.200.66/bnet/services/TradeService?wsdl" />
 	</bean>
 
 <!-- 

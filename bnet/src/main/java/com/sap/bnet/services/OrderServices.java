@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sap.bnet.constant.Operator;
-import com.sap.bnet.controller.CallbackController;
+import com.sap.bnet.controller.receiveOrderController;
 import com.sap.bnet.ws.client.ITradeService;
 
 /**
@@ -30,16 +30,16 @@ import com.sap.bnet.ws.client.ITradeService;
 @Service
 public class OrderServices implements IOrderServices{
 	
-	public Logger logger = LoggerFactory.getLogger(CallbackController.class);
+	public Logger logger = LoggerFactory.getLogger(receiveOrderController.class);
 	
 	@Value("${productId}")
-	private String siid;
-	
-	@Value("${bizId}")
 	private String productId;
 	
-	@Value("${siId}")
+	@Value("${bizId}")
 	private String bizId;
+	
+	@Value("${siId}")
+	private String siId;
 	
 	@Autowired
 	private ITradeService tradeService;
@@ -73,7 +73,7 @@ public class OrderServices implements IOrderServices{
 				String customerXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 						              +   "<Package>"
 						              +        "<OPFlag>0104</OPFlag>"
-						              +        "<SIID>" + siid + "</SIID>"
+						              +        "<SIID>" + siId + "</SIID>"
 						              +        "<TimeStamp>" + currentDate + "</TimeStamp>"
 						              +        "<ProductID>" + productId + "</ProductID>"
 						              +        "<CustAccount>" + custAccount + "</custAccount>"

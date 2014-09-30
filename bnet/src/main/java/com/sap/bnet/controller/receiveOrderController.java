@@ -31,15 +31,15 @@ import com.sap.bnet.services.IOrderServices;
  */
 
 @Controller
-public class CallbackController {
+public class receiveOrderController {
 
-	public Logger logger = LoggerFactory.getLogger(CallbackController.class);
+	public Logger logger = LoggerFactory.getLogger(receiveOrderController.class);
 	
 	@Autowired
 	private IOrderServices orderServices;
 	
-	@RequestMapping("/callback") 
-	public ModelAndView callback(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
+	@RequestMapping("/receiveOrder") 
+	public ModelAndView receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
 		ModelAndView mv = new ModelAndView();
 		HashMap modelMap = new HashMap();
 		if(StringUtils.isEmpty(order.getStreamingNo()) || StringUtils.isEmpty(order.getRand()) || StringUtils.isEmpty(order.getEncode())){
@@ -53,6 +53,7 @@ public class CallbackController {
 				return new ModelAndView("redirect:"+ result.get(Operator.Redirect));
 			}
 		} catch (Exception e) {
+			logger.error("addOrder Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
 			modelMap.put("errormessage", e);
 			return new ModelAndView("error",modelMap);
 		}
