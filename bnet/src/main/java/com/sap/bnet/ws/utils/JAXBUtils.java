@@ -6,7 +6,6 @@ package com.sap.bnet.ws.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,9 +15,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.bnet.ws.model.Account;
 import com.sap.bnet.ws.model.Package;
-import com.sap.bnet.ws.model.Product;
 
 /**
  * @author Shawn
@@ -59,57 +56,4 @@ public class JAXBUtils {
 		return packages;
 	}
 	
-	
-	
-	public static void main(String[] args) {
-		Package pack = new Package();
-		pack.setCustAccount("accc");
-		pack.setOpFlag("0104");
-		pack.setSiId("");
-		pack.setProductId("");
-		pack.setStreamingNo("asddsds");
-		pack.setSummary("客户查询");
-		pack.setTimeStamp("12548947949");
-		
-		ArrayList<Product> list = new ArrayList();
-		Product product = new Product();
-		product.setParentType("parentT");
-		product.setProductInstId("productInId");
-		product.setProductValue("");
-		list.add(product);
-		
-		Product product2 = new Product();
-		product2.setParentType("parentT2");
-		product2.setProductInstId("productInId2");
-		product2.setProductValue("");
-		list.add(product2);
-		pack.setProducts(list);
-		
-		Account account = new Account();
-		account.setAccName("accName1");
-		account.setAccType("accType1");
-		
-		ArrayList<Account> list2 = new ArrayList();
-		list2.add(account);
-		pack.setAccounts(list2);
-		
-		String result = JAXBUtils.marshal(pack);
-		System.out.println(result);
-		
-		
-		String customerXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-	              +   "<Package>"
-	              +        "<OPFlag>0104</OPFlag>"
-	              +        "<SIID>3314</SIID>"
-	              +        "<TimeStamp>558899</TimeStamp>"
-	              +        "<ProductID>15549898</ProductID>"
-	              +        "<CustAccount>1546466111</CustAccount>"
-	              +        "<Summary>客户查询</Summary>" 
-	              +   "</Package>";
-		
-		Package packages = JAXBUtils.unmarshal(customerXml);
-		System.out.println(packages.getOpFlag());
-		System.out.println(packages.getProductId());
-	}
-
 }

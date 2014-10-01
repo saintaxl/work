@@ -4,9 +4,6 @@
 package com.sap.bnet.services;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -15,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.sap.bnet.constant.Operator;
-import com.sap.bnet.ws.client.ITradeService;
+import com.sap.bnet.ws.facade.ITradeServiceFacade;
 import com.sap.bnet.ws.model.Package;
 import com.sap.bnet.ws.utils.JAXBUtils;
 
@@ -43,7 +39,7 @@ public class OrderServices implements IOrderServices{
 	private String siId;
 	
 	@Autowired
-	private ITradeService tradeService;
+	private ITradeServiceFacade tradefacade;
 
 	public String analysis(String streamingNo, String rand,String encode) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyymmddhhssmm");
@@ -93,10 +89,10 @@ public class OrderServices implements IOrderServices{
 	}
 	
 	private String validation(String streamingNo, String rand,String encode){
-		String xml = tradeService.getPortalRequest(streamingNo, rand);
+		String xml = tradefacade.getPortalRequest(streamingNo, rand);
 		Package packages = JAXBUtils.unmarshal(xml);
 		String opflag = packages.getOpFlag();
-		String xmlMd5 = tradeService.getEncodeString(xml);
+		String xmlMd5 = tradefacade.getEncodeString(xml);
 		if(!encode.equals(xmlMd5)){
 			logger.warn("respone data not match original data");
 			Package reqPackage = new Package();
@@ -112,7 +108,7 @@ public class OrderServices implements IOrderServices{
 					      +     "<ReturnStatus>00501</ReturnStatus>"
 					      +     "<Summary></Summary>"
 					      + "</Package>";
-			String returnXml = tradeService.getPortalResult(resXml);
+			String returnXml = tradefacade.getPortalResult(resXml);
 			return StringUtils.substringBetween(returnXml,"<ReturnUrl>", "</ReturnUrl>");
 		}
 		return opflag;

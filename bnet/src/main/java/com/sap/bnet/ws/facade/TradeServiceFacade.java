@@ -1,7 +1,7 @@
 /**
  * © 2014 SAP AG. All rights reserved.
  */
-package com.sap.bnet.ws.client;
+package com.sap.bnet.ws.facade;
 
 import java.rmi.RemoteException;
 
@@ -27,12 +27,12 @@ import com.sap.bnet.ws.stub.ProdServiceService;
  * @create Sep 29, 2014 6:45:07 PM
  */
 @Service
-public class TradeService implements ITradeService{
+public class TradeServiceFacade implements ITradeServiceFacade{
 	
-	public static final Logger logger = LoggerFactory.getLogger(TradeService.class);
+	public static final Logger logger = LoggerFactory.getLogger(TradeServiceFacade.class);
 	
 	@Autowired
-	private ProdServiceService tradeService;
+	private ProdServiceService tradeWebService;
 	
 	public String getPortalRequest(String streamingNo,String randNo){
 		logger.debug("Call remote service [getPortalRequest] para [streamingNo:{} , randNo:{}]",streamingNo,randNo);
@@ -49,7 +49,7 @@ public class TradeService implements ITradeService{
 		
 		OMElement respElement = null;
 		try {
-			respElement = tradeService.getPortalRequest(method);
+			respElement = tradeWebService.getPortalRequest(method);
 		} catch (RemoteException e) {
 			logger.error("Call remote service getPortalRequestRequest fail {}",e);
 			throw new RuntimeException(e);
@@ -85,7 +85,7 @@ public class TradeService implements ITradeService{
 		
 		OMElement respElement = null;
 		try {
-			respElement = tradeService.getPortalRequest(method);
+			respElement = tradeWebService.getPortalRequest(method);
 		} catch (RemoteException e) {
 			logger.error("Call remote service getEncodeString fail {}",e);
 			throw new RuntimeException(e);
@@ -122,7 +122,7 @@ public class TradeService implements ITradeService{
 		
 		OMElement respElement = null;
 		try {
-			respElement = tradeService.getPortalResult(method);
+			respElement = tradeWebService.getPortalResult(method);
 		} catch (RemoteException e) {
 			logger.error("Call remote service getPortalResult fail {}",e);
 			throw new RuntimeException(e);

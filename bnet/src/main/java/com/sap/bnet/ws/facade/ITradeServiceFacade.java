@@ -1,7 +1,7 @@
 /**
  * © 2014 SAP AG. All rights reserved.
  */
-package com.sap.bnet.ws.client;
+package com.sap.bnet.ws.facade;
 
 /**
  * @title 
@@ -11,7 +11,7 @@ package com.sap.bnet.ws.client;
  * @version ITradeService.java,v 1.0
  * @create Sep 29, 2014 6:56:54 PM
  */
-public interface ITradeService {
+public interface ITradeServiceFacade {
 
 	public String getPortalRequest(String streamingNo,String randNo);
 	
