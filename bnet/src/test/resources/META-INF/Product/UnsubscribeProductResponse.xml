@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<StreamingNo>1141</StreamingNo>
+	<OPFlag>0103</OPFlag>
+	<ProductID>200</ProductID>
+	<BizID>666666</BizID>
+	<AreaCode>57102</AreaCode>
+	<CustID>6</CustID>
+	<CustAccount>aptest</CustAccount>
+	<CustName>中国电信测试企业</CustName>
+	<Summary>客户退订产品</Summary>
+</Package>

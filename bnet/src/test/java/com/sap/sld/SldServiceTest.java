@@ -1,7 +1,7 @@
 /**
  * © 2014 SAP AG. All rights reserved.
  */
-package com.sap.bnet.test;
+package com.sap.sld;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

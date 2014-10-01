@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import com.sap.bnet.constant.Operator;
 import com.sap.bnet.ws.client.ITradeService;
+import com.sap.bnet.ws.model.Package;
+import com.sap.bnet.ws.utils.JAXBUtils;
 
 /**
  * @title 
@@ -92,10 +94,17 @@ public class OrderServices implements IOrderServices{
 	
 	private String validation(String streamingNo, String rand,String encode){
 		String xml = tradeService.getPortalRequest(streamingNo, rand);
-		String opflag = StringUtils.substringBetween(xml,"<OPFlag>", "</OPFlag>");
+		Package packages = JAXBUtils.unmarshal(xml);
+		String opflag = packages.getOpFlag();
 		String xmlMd5 = tradeService.getEncodeString(xml);
 		if(!encode.equals(xmlMd5)){
 			logger.warn("respone data not match original data");
+			Package reqPackage = new Package();
+			reqPackage.setStreamingNo(streamingNo);
+			reqPackage.setOpFlag(opflag);
+			reqPackage.setReturnStatus("");
+			
+			
 			String resXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 					      + "<Package>"
 					      +     "<StreamingNo>" + streamingNo + "</StreamingNo>"

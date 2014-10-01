@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<StreamingNo>1175</StreamingNo>
+	<OPFlag>0205</OPFlag>
+	<ProductID>200</ProductID>
+	<BizID>6</BizID>
+	<AreaCode></AreaCode>
+	<CustID>6</CustID>
+	<CustAccount>ap</CustAccount>
+	<CustName>中国电信测试企业</CustName>
+	<UserID>ap</UserID>
+	<AccType>1</AccType>
+	<AccName>王五</AccName>
+	<ReturnStatus>00000</ReturnStatus>
+	<Summary>用户产品认证</Summary>
+</Package>

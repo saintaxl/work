@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<StreamingNo>1246</StreamingNo>
+	<OPFlag>0202</OPFlag>
+	<ProductID>200</ProductID>
+	<BizID>6</BizID>
+	<CustID>6</CustID>
+	<AccountInfo>
+		<UserID>ap</UserID>
+		<AccType>1</AccType>
+		<AccName>马汉</AccName>
+	</AccountInfo>
+	<Summary>用户信息变更</Summary>
+</Package>
