@@ -6,6 +6,7 @@ package com.sap.bnet.controller;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sap.bnet.constant.USession;
 import com.sap.bnet.services.IRemoteService;
+import com.sap.bnet.sldclient.SldServices;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
 
@@ -38,6 +41,9 @@ public class receiveOrderController {
 	@Autowired
 	private IRemoteService remoteServices;
 	
+	@Autowired
+	private SldServices sldServices;
+	
 	@RequestMapping("/receiveOrder") 
 	public ModelAndView receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
 		ModelAndView mv = new ModelAndView();
@@ -48,14 +54,20 @@ public class receiveOrderController {
 		}
 		
 		try {
-			PackageElement packages = remoteServices.getPackage(order.getStreamingNo(), order.getRand(),order.getEncode());
-			OPFlag opFlag = packages.getOpFlag();
+			PackageElement portalRequest = remoteServices.getPortalRequest(order.getStreamingNo(), order.getRand(),order.getEncode());
+			OPFlag opFlag = portalRequest.getOpFlag();
+			PackageElement portalResultResponse = null;
 			if(opFlag == opFlag.CUST_OPEN_PRODUCT || opFlag == opFlag.CUST_CHANGE_PRODUCT || opFlag == opFlag.CUST_UNSUBSCRIBE_PRODUCT ){
-				PackageElement customer = remoteServices.queryCustomer(order.getStreamingNo(),packages);
+				portalResultResponse = remoteServices.queryCustomer(order.getStreamingNo(),portalRequest);
 			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
-				PackageElement user = remoteServices.queryUserInfo(order.getStreamingNo(),packages);
+				portalResultResponse = remoteServices.queryUserInfo(order.getStreamingNo(),portalRequest);
 			}else if(opFlag == opFlag.AUTHENTICATION){
-				PackageElement user = remoteServices.getAuthentication(order.getStreamingNo(),packages);
+				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequest);
+			}
+			
+			HttpSession session = request.getSession();
+			if(session.getAttribute(USession.USER_ID) == null){
+				sldServices.logonByServiceToken(session);
 			}
 			
 		} catch (Exception e) {

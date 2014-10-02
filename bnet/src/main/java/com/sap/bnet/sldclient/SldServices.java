@@ -3,6 +3,8 @@
  */
 package com.sap.bnet.sldclient;
 
+import javax.servlet.http.HttpSession;
+
 import com.sap.bnet.model.TrialRequest;
 import com.sap.bnet.model.TrialResponse;
 
@@ -17,7 +19,7 @@ import com.sap.bnet.model.TrialResponse;
  */
 public interface SldServices {
 	
-    public boolean logonByServiceToken();
+    public boolean logonByServiceToken(HttpSession session);
     
     public boolean isEmailUnique(String email);
     

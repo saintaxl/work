@@ -48,7 +48,7 @@ public class RemoteService implements IRemoteService {
 	@Autowired
 	protected ITradeServiceFacade tradefacade;
 
-	public PackageElement getPackage(String streamingNo, String rand,String encode) {
+	public PackageElement getPortalRequest(String streamingNo, String rand,String encode) {
 		PackageElement packages = tradefacade.getPortalRequest(streamingNo, rand);
 		String ciphertext = tradefacade.getEncodeString(packages.toXML());
 		if(!encode.equals(ciphertext)){
@@ -57,7 +57,9 @@ public class RemoteService implements IRemoteService {
 			portalResultRequest.setOpFlag(packages.getOpFlag());
 			portalResultRequest.setReturnStatus(RetunCode.VERIFY_ERROR);
 			portalResultRequest.setSummary("");
-			tradefacade.getPortalResult(portalResultRequest.toXML());
+			String reqXML = portalResultRequest.toXML();
+			logger.debug("call encode not match reqXML:{}",reqXML);
+			tradefacade.getPortalResult(reqXML);
 			logger.warn("respone data not match original data");
 			throw new RuntimeException("encode not match");
 		}
@@ -66,7 +68,9 @@ public class RemoteService implements IRemoteService {
 		portalResultRequest.setOpFlag(packages.getOpFlag());
 		portalResultRequest.setReturnStatus(RetunCode.SUCCESSFUL);
 		portalResultRequest.setSummary(packages.getSummary());
-		tradefacade.getPortalResult(portalResultRequest.toXML());
+		String reqXML = portalResultRequest.toXML();
+		logger.debug("call getPortalRequest response message by reqXML:{}",reqXML);
+		tradefacade.getPortalResult(reqXML);
 		return packages;
 	}
 
@@ -88,7 +92,10 @@ public class RemoteService implements IRemoteService {
 		portalResultRequest.setCustName(portalRequest.getCustName());
 		portalResultRequest.setAccessNo(portalRequest.getAccessNo());
 		portalResultRequest.setSummary("客户查询 ");
-		PackageElement response = tradefacade.getPortalResult(portalResultRequest.toXML());
+		String reqXML = portalResultRequest.toXML();
+		logger.debug("call queryCustomer reqXML:{}",reqXML);
+		PackageElement response = tradefacade.getPortalResult(reqXML);
+		logger.debug("call queryCustomer respXML:{} ",response.toXML());
 		return response;
 	}
 
@@ -111,7 +118,10 @@ public class RemoteService implements IRemoteService {
 			portalResultRequest.setUserId(userID);
 		}
 		portalResultRequest.setSummary("用户查询");
-		PackageElement response = tradefacade.getPortalResult(portalResultRequest.toXML());
+		String reqXML = portalResultRequest.toXML();
+		logger.debug("call queryUserInfo reqXML:{}",reqXML);
+		PackageElement response = tradefacade.getPortalResult(reqXML);
+		logger.debug("call queryUserInfo respXML:{} ",response.toXML());
 		return response;
 	}
 
@@ -129,7 +139,10 @@ public class RemoteService implements IRemoteService {
 		portalResultRequest.setUserId(portalRequest.getUserId());
 		portalResultRequest.setPassword(password);
 		portalResultRequest.setSummary("客户端用户登录");
-		PackageElement response = tradefacade.getPortalResult(portalResultRequest.toXML());
+		String reqXML = portalResultRequest.toXML();
+		logger.debug("call getAuthentication reqXML:{}",reqXML);
+		PackageElement response = tradefacade.getPortalResult(reqXML);
+		logger.debug("call getAuthentication respXML:{} ",response.toXML());
 		return response;
 	}
 

@@ -6,8 +6,11 @@ package com.sap.bnet.sldclient;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 
+import com.sap.bnet.constant.USession;
 import com.sap.bnet.model.TrialRequest;
 import com.sap.bnet.model.TrialResponse;
 import com.sap.sbo.odatathinclient.ODataClientManager;
@@ -35,11 +38,15 @@ public class SldServicesImpl implements SldServices {
         this.odataManager = odataManager;
     }
 
-	public boolean logonByServiceToken() {
+	public boolean logonByServiceToken(HttpSession session) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("Token", ODCipher.getInstance().decrypt(sldServiceToken));
-        Boolean res = odataManager.invokeFunction("LogonByServiceToken", parameters, Boolean.class);
-        return res;
+        Boolean result = odataManager.invokeFunction("LogonByServiceToken", parameters, Boolean.class);
+        if(result){
+        	session.setAttribute(USession.USER_ID, result);
+        	session.setMaxInactiveInterval(60 * 20);
+        }
+        return result;
 	}
 
 	public boolean isEmailUnique(String email) {

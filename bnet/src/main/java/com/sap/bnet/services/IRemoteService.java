@@ -5,7 +5,7 @@ import com.sap.bnet.ws.model.PackageElement;
 
 public interface IRemoteService {
 	
-	public PackageElement getPackage(String streamingNo,String rand,String encode);
+	public PackageElement getPortalRequest(String streamingNo,String rand,String encode);
 
 	public PackageElement queryCustomer(String streamingNo,PackageElement portalRequest);
 
