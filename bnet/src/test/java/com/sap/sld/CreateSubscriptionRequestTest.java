@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNotNull;
 import javax.annotation.Resource;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,14 +34,12 @@ public class CreateSubscriptionRequestTest {
 	
 	@Before
 	public void before(){
-		sldService.logonByServiceToken();
+		sldService.logonByServiceToken(null);
 	}
 
 	@Test
 	public void createSubscriptionRequestTest() {
 		TrialRequest request = new TrialRequest();
-		
-		
 		TrialResponse result = sldService.createSubscriptionRequest(request);
 		assertNotNull(result);
 		//assertEquals(result, true);

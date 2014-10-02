@@ -33,7 +33,7 @@ public class SldServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void logonByServiceToken() {
-		boolean result = sldService.logonByServiceToken();
+		boolean result = sldService.logonByServiceToken(null);
 		assertNotNull(result);
 		assertEquals(result, true);
 	}

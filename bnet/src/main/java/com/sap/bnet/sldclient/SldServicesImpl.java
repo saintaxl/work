@@ -42,7 +42,7 @@ public class SldServicesImpl implements SldServices {
 		Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("Token", ODCipher.getInstance().decrypt(sldServiceToken));
         Boolean result = odataManager.invokeFunction("LogonByServiceToken", parameters, Boolean.class);
-        if(result){
+        if(session!=null && result){
         	session.setAttribute(USession.USER_ID, result);
         	session.setMaxInactiveInterval(60 * 20);
         }
