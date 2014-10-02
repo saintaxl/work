@@ -5,10 +5,6 @@ package com.sap.bnet.model;
 
 import java.io.Serializable;
 
-import org.springframework.validation.annotation.Validated;
-
-import com.sap.bnet.validator.EmailUniqueValidator;
-
 /**
  * @title
  * @description

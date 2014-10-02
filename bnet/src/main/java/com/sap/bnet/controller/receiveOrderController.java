@@ -4,7 +4,6 @@
 package com.sap.bnet.controller;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,8 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sap.bnet.constant.Operator;
-import com.sap.bnet.services.IOrderServices;
+import com.sap.bnet.services.IRemoteService;
+import com.sap.bnet.ws.constant.OPFlag;
+import com.sap.bnet.ws.model.PackageElement;
 
 
 /**
@@ -36,7 +36,7 @@ public class receiveOrderController {
 	public Logger logger = LoggerFactory.getLogger(receiveOrderController.class);
 	
 	@Autowired
-	private IOrderServices orderServices;
+	private IRemoteService remoteServices;
 	
 	@RequestMapping("/receiveOrder") 
 	public ModelAndView receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
@@ -48,10 +48,16 @@ public class receiveOrderController {
 		}
 		
 		try {
-			String opflag = orderServices.analysis(order.getStreamingNo(), order.getRand(),order.getEncode());
-			if(opflag.startsWith("http://")){
-				return new ModelAndView("redirect:"+ opflag);
+			PackageElement packages = remoteServices.getPackage(order.getStreamingNo(), order.getRand(),order.getEncode());
+			OPFlag opFlag = packages.getOpFlag();
+			if(opFlag == opFlag.CUST_OPEN_PRODUCT || opFlag == opFlag.CUST_CHANGE_PRODUCT || opFlag == opFlag.CUST_UNSUBSCRIBE_PRODUCT ){
+				PackageElement customer = remoteServices.queryCustomer(order.getStreamingNo(),packages);
+			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
+				PackageElement user = remoteServices.queryUserInfo(order.getStreamingNo(),packages);
+			}else if(opFlag == opFlag.AUTHENTICATION){
+				PackageElement user = remoteServices.getAuthentication(order.getStreamingNo(),packages);
 			}
+			
 		} catch (Exception e) {
 			logger.error("addOrder Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
 			modelMap.put("errormessage", e);

@@ -12,13 +12,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.sap.bnet.ws.constant.OPFlag;
+import com.sap.bnet.ws.constant.RetunCode;
+import com.sap.bnet.ws.utils.JAXBUtils;
+
 /**
  * @author Shawn
  *
  */
 @XmlRootElement(name="Package")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Package implements Serializable{
+public class PackageElement implements Serializable{
 	
 	private static final long serialVersionUID = 1233567505377868105L;
 	
@@ -26,7 +30,7 @@ public class Package implements Serializable{
 	private String streamingNo;
 	
 	@XmlElement(name="OPFlag")
-	private String opFlag;
+	private OPFlag opFlag;
 	
 	@XmlElement(name="SIID")
 	private String siId;
@@ -44,7 +48,7 @@ public class Package implements Serializable{
 	private String summary;
 	
 	@XmlElement(name="ReturnStatus")
-	private String returnStatus;
+	private RetunCode returnStatus;
 	
 	@XmlElement(name="BizID")
 	private String bizID;
@@ -63,6 +67,9 @@ public class Package implements Serializable{
 	
 	@XmlElement(name="AccessNo")
 	private String accessNo;
+	
+	@XmlElement(name="UserID")
+	private String userId;
 	
 	@XmlElementWrapper(name="ProductInfo")
     @XmlElement(name="ProductAttribute")
@@ -87,11 +94,11 @@ public class Package implements Serializable{
 		this.streamingNo = streamingNo;
 	}
 
-	public String getOpFlag() {
+	public OPFlag getOpFlag() {
 		return opFlag;
 	}
 
-	public void setOpFlag(String opFlag) {
+	public void setOpFlag(OPFlag opFlag) {
 		this.opFlag = opFlag;
 	}
 
@@ -135,11 +142,11 @@ public class Package implements Serializable{
 		this.summary = summary;
 	}
 
-	public String getReturnStatus() {
+	public RetunCode getReturnStatus() {
 		return returnStatus;
 	}
 
-	public void setReturnStatus(String returnStatus) {
+	public void setReturnStatus(RetunCode returnStatus) {
 		this.returnStatus = returnStatus;
 	}
 
@@ -197,6 +204,18 @@ public class Package implements Serializable{
 
 	public void setProducts(List<Product> products) {
 		this.products = products;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String toXML(){
+		return JAXBUtils.marshal(this);
 	}
 	
 }

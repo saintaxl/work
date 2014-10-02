@@ -10,8 +10,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.Account;
-import com.sap.bnet.ws.model.Package;
+import com.sap.bnet.ws.model.PackageElement;
 import com.sap.bnet.ws.model.Product;
 import com.sap.bnet.ws.utils.JAXBUtils;
 
@@ -25,14 +26,14 @@ public class JAXBTest {
 	
 	@Test
 	public void buildPackage(){
-		Package basePackage = generateBasePackage();
+		PackageElement basePackage = generateBasePackage();
 		String xml = JAXBUtils.marshal(basePackage);
 		System.out.println(xml);
 	}
 	
 	@Test
 	public void buildProductList(){
-		Package basePackage = generateBasePackage();
+		PackageElement basePackage = generateBasePackage();
 		ArrayList<Product> productList = new ArrayList();
 		Product product1 = new Product();
 		product1.setParentType("usecount");
@@ -52,7 +53,7 @@ public class JAXBTest {
 	
 	@Test
 	public void buildAccountList(){
-		Package basePackage = generateBasePackage();
+		PackageElement basePackage = generateBasePackage();
 		ArrayList<Account> accountList = new ArrayList();
 		Account account = new Account();
 		account.setAccName("马汉");
@@ -66,10 +67,10 @@ public class JAXBTest {
 		System.out.println(xml);
 	}
 	
-	private Package generateBasePackage(){
-		Package pack = new Package();
+	private PackageElement generateBasePackage(){
+		PackageElement pack = new PackageElement();
 		pack.setCustAccount("aptest");
-		pack.setOpFlag("0104");
+		pack.setOpFlag(OPFlag.CUST_OPEN_PRODUCT);
 		pack.setSiId("");
 		pack.setProductId("200");
 		pack.setStreamingNo("1141");

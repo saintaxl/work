@@ -3,6 +3,8 @@
  */
 package com.sap.bnet.ws.facade;
 
+import com.sap.bnet.ws.model.PackageElement;
+
 /**
  * @title 
  * @description 
@@ -13,10 +15,10 @@ package com.sap.bnet.ws.facade;
  */
 public interface ITradeServiceFacade {
 
-	public String getPortalRequest(String streamingNo,String randNo);
+	public PackageElement getPortalRequest(String streamingNo,String randNo);
 	
 	public String getEncodeString(String decode);
 
-	public String getPortalResult(String resXml);
+	public PackageElement getPortalResult(String reqXML);
 	
 }

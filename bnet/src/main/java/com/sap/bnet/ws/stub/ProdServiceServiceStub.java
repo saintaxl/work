@@ -6,6 +6,8 @@
  */
 package com.sap.bnet.ws.stub;
 
+import org.apache.axis2.transport.http.HTTPConstants;
+
 /*
  *  ProdServiceServiceStub java implementation
  */
@@ -72,14 +74,14 @@ public class ProdServiceServiceStub extends org.apache.axis2.client.Stub impleme
 	 * Constructor that takes in a configContext
 	 */
 
-	public ProdServiceServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext, java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
-		this(configurationContext, targetEndpoint, false);
+	public ProdServiceServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext, java.lang.String targetEndpoint,java.lang.Long timeout) throws org.apache.axis2.AxisFault {
+		this(configurationContext, targetEndpoint, false,timeout);
 	}
 
 	/**
 	 * Constructor that takes in a configContext and useseperate listner
 	 */
-	public ProdServiceServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext, java.lang.String targetEndpoint, boolean useSeparateListener) throws org.apache.axis2.AxisFault {
+	public ProdServiceServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext, java.lang.String targetEndpoint, boolean useSeparateListener,java.lang.Long timeout) throws org.apache.axis2.AxisFault {
 		// To populate AxisService
 		populateAxisService();
 		populateFaults();
@@ -88,14 +90,15 @@ public class ProdServiceServiceStub extends org.apache.axis2.client.Stub impleme
 
 		_serviceClient.getOptions().setTo(new org.apache.axis2.addressing.EndpointReference(targetEndpoint));
 		_serviceClient.getOptions().setUseSeparateListener(useSeparateListener);
+		_serviceClient.getOptions().setTimeOutInMilliSeconds(timeout);
 
 	}
 
 	/**
 	 * Constructor taking the target endpoint
 	 */
-	public ProdServiceServiceStub(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
-		this(null, targetEndpoint);
+	public ProdServiceServiceStub(java.lang.String targetEndpoint,java.lang.Long timeout) throws org.apache.axis2.AxisFault {
+		this(null, targetEndpoint,timeout);
 	}
 
 	/**
@@ -220,7 +223,7 @@ public class ProdServiceServiceStub extends org.apache.axis2.client.Stub impleme
 		org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
 		_operationClient.getOptions().setAction("http://www.bnet.cn/v3.0/ProdService/getEncodeStringRequest");
 		_operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
+		
 		addPropertyToOperationClient(_operationClient, org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR, "&");
 
 		// create SOAP envelope with that payload

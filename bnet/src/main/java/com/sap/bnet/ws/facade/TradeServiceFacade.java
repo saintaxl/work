@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sap.bnet.ws.model.PackageElement;
 import com.sap.bnet.ws.stub.ProdServiceService;
+import com.sap.bnet.ws.utils.JAXBUtils;
 
 /**
  * @title 
@@ -34,7 +36,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 	@Autowired
 	private ProdServiceService tradeWebService;
 	
-	public String getPortalRequest(String streamingNo,String randNo){
+	public PackageElement getPortalRequest(String streamingNo,String randNo){
 		logger.debug("Call remote service [getPortalRequest] para [streamingNo:{} , randNo:{}]",streamingNo,randNo);
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 		OMElement method = factory.createOMElement(new QName("getPortalRequest"));
@@ -51,7 +53,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		try {
 			respElement = tradeWebService.getPortalRequest(method);
 		} catch (RemoteException e) {
-			logger.error("Call remote service getPortalRequestRequest fail {}",e);
+			logger.error("Call remote service getPortalRequestRequest fail {} streamingNo: {} randNo: {}",e,streamingNo,randNo);
 			throw new RuntimeException(e);
 		}
 		
@@ -61,16 +63,18 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		
 		OMElement returnElement = respElement.getFirstChildWithName(new QName("getPortalRequestReturn"));
 		if(returnElement == null){
+			logger.error("no return data as xml of remote service by getPortalRequest streamingNo: {} randNo: {}",streamingNo,randNo);
 			throw new RuntimeException("no return data as xml of remote service by getPortalRequest");
 		}
 		
-		String xml = returnElement.getText();
-		logger.debug("Call remote service [getPortalRequest] result XML :{}", xml);
-		if(StringUtils.isEmpty(xml)){
+		String portalRequestReturn = returnElement.getText();
+		logger.debug("Call remote service [getPortalRequest] result XML :{}", portalRequestReturn);
+		if(StringUtils.isEmpty(portalRequestReturn)){
+			logger.error("no return data as xml of remote service by getPortalRequest streamingNo: {} randNo: {}",streamingNo,randNo);
 			throw new RuntimeException("no return data as xml of remote service by getPortalRequest");
 		}
-		
-		return xml;
+		 
+		return JAXBUtils.unmarshal(portalRequestReturn);
 	}
 
 	public String getEncodeString(String decode) {
@@ -92,31 +96,34 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		}
 		
 		if(respElement == null){
+			logger.error("no result data of remote service by getEncodeString decode:{}",decode);
 			throw new RuntimeException("no result data of remote service by getEncodeString");
 		}
 		
 		OMElement returnElement = respElement.getFirstChildWithName(new QName("getEncodeStringReturn"));
 		if(returnElement == null){
+			logger.error("no return data as xml of remote service by getEncodeString decode:{}",decode);
 			throw new RuntimeException("no return data as xml of remote service by getEncodeString");
 		}
 		
-		String xml = returnElement.getText();
-		logger.debug("Call remote service [getEncodeString] result XML :{}", xml);
-		if(StringUtils.isEmpty(xml)){
-			throw new RuntimeException("no return data as xml of remote service by getEncodeString");
+		String encode = returnElement.getText();
+		logger.debug("Call remote service [getEncodeString] result XML :{}", encode);
+		if(StringUtils.isEmpty(encode)){
+			logger.error("no return data as encode of remote service by getEncodeString decode:{}",decode);
+			throw new RuntimeException("no return data as encode of remote service by getEncodeString");
 		}
 		
-		return xml;
+		return encode;
 	}
 
 	@Override
-	public String getPortalResult(String resXml) {
-		logger.debug("Call remote service [getPortalResult] para [resXml:{}]",resXml);
+	public PackageElement getPortalResult(String reqXML) {
+		logger.debug("Call remote service [getPortalResult] para [reqXML:{}]",reqXML);
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 		OMElement method = factory.createOMElement(new QName("getPortalResult"));
 		
 		OMElement decodeElement = factory.createOMElement(new QName("reqXML"));
-		decodeElement.setText(resXml);
+		decodeElement.setText(reqXML);
 		method.addChild(decodeElement);
 		
 		
@@ -124,26 +131,29 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		try {
 			respElement = tradeWebService.getPortalResult(method);
 		} catch (RemoteException e) {
-			logger.error("Call remote service getPortalResult fail {}",e);
+			logger.error("Call remote service getPortalResult fail {} reqXML:{}", e ,reqXML);
 			throw new RuntimeException(e);
 		}
 		
 		if(respElement == null){
+			logger.error("no result data of remote service by getPortalResult reqXML:{}",reqXML);
 			throw new RuntimeException("no result data of remote service by getPortalResult");
 		}
 		
 		OMElement returnElement = respElement.getFirstChildWithName(new QName("getPortalResultReturn"));
 		if(returnElement == null){
-			throw new RuntimeException("no return data as xml of remote service by getPortalResult");
+			logger.error("no getPortalResultReturn of remote service by getPortalResult reqXML:{}",reqXML);
+			throw new RuntimeException("no getPortalResultReturn of remote service by getPortalResult");
 		}
 		
-		String returnUrl = returnElement.getText();
-		logger.debug("Call remote service [getPortalResult] result :{}", returnUrl);
-		if(StringUtils.isEmpty(returnUrl)){
-			throw new RuntimeException("no return url of remote service by getPortalResult");
+		String portalResultReturn = returnElement.getText();
+		logger.debug("Call remote service [getPortalResult] result :{}", portalResultReturn);
+		if(StringUtils.isEmpty(portalResultReturn)){
+			logger.error("no return data of remote service by getPortalResult reqXML:{}",reqXML);
+			throw new RuntimeException("no return data of remote service by getPortalResult");
 		}
 		
-		return returnUrl;
+		return JAXBUtils.unmarshal(portalResultReturn);
 	}
 
 }

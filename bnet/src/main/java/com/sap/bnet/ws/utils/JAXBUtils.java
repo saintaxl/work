@@ -15,7 +15,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.bnet.ws.model.Package;
+import com.sap.bnet.ws.model.PackageElement;
 
 /**
  * @author Shawn
@@ -25,10 +25,10 @@ public class JAXBUtils {
 	
 	public final static Logger logger = LoggerFactory.getLogger(JAXBUtils.class);
 	
-	public static String marshal(Package packages){
+	public static String marshal(PackageElement packages){
 		ByteArrayOutputStream buff = new ByteArrayOutputStream();
 		try {  
-            JAXBContext context = JAXBContext.newInstance(Package.class);  
+            JAXBContext context = JAXBContext.newInstance(PackageElement.class);  
             Marshaller marshaller = context.createMarshaller();  
             marshaller.setProperty(Marshaller.JAXB_ENCODING,"utf-8");
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -43,12 +43,12 @@ public class JAXBUtils {
 		return buff.toString();
 	}
 	
-	public static Package unmarshal(String xml) {
-		Package packages = null;
+	public static PackageElement unmarshal(String xml) {
+		PackageElement packages = null;
 		try {
-			JAXBContext context = JAXBContext.newInstance(Package.class);
+			JAXBContext context = JAXBContext.newInstance(PackageElement.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			packages = (Package) unmarshaller.unmarshal(new StringReader(xml));
+			packages = (PackageElement) unmarshaller.unmarshal(new StringReader(xml));
 		} catch (JAXBException e) {
 			logger.error("JAXB unmarshal package object exception",e);
             throw new RuntimeException(e);

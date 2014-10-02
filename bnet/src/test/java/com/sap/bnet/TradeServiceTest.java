@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sap.bnet.ws.facade.ITradeServiceFacade;
+import com.sap.bnet.ws.model.PackageElement;
 import com.sap.bnet.ws.stub.ProdServiceServiceStub;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -59,8 +60,8 @@ public class TradeServiceTest extends AbstractJUnit4SpringContextTests {
 	
 	@Test
 	public void getPortalRequestFunction(){
-		String responseXML = tradeService.getPortalRequest("12341", "casdyy");
-		assertNotNull(responseXML);
+		PackageElement packages = tradeService.getPortalRequest("12341", "casdyy");
+		assertNotNull(packages);
 	}
 	
 

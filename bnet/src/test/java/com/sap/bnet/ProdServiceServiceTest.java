@@ -24,7 +24,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testgetEncodeString() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);// the
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);// the
 																												// default
 																												// implementation
 																												// should
@@ -45,7 +45,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testStartgetEncodeString() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);
 		org.apache.axiom.om.OMElement getEncodeString18 = (org.apache.axiom.om.OMElement) getTestObject(org.apache.axiom.om.OMElement.class);
 		// TODO : Fill in the getEncodeString18 here
 
@@ -72,7 +72,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testgetPortalRequest() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);// the
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);// the
 																												// default
 																												// implementation
 																												// should
@@ -93,7 +93,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testStartgetPortalRequest() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);
 		org.apache.axiom.om.OMElement getPortalRequest20 = (org.apache.axiom.om.OMElement) getTestObject(org.apache.axiom.om.OMElement.class);
 		// TODO : Fill in the getPortalRequest20 here
 
@@ -120,7 +120,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testgetPortalResult() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);// the
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);// the
 																												// default
 																												// implementation
 																												// should
@@ -141,7 +141,7 @@ public class ProdServiceServiceTest extends junit.framework.TestCase {
 	 * Auto generated test method
 	 */
 	public void testStartgetPortalResult() throws java.lang.Exception {
-		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint);
+		com.sap.bnet.ws.stub.ProdServiceServiceStub stub = new com.sap.bnet.ws.stub.ProdServiceServiceStub(targetEndpoint,3000L);
 		org.apache.axiom.om.OMElement getPortalResult22 = (org.apache.axiom.om.OMElement) getTestObject(org.apache.axiom.om.OMElement.class);
 		// TODO : Fill in the getPortalResult22 here
 
