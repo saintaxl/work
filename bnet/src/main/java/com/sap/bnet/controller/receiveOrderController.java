@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.sap.bnet.services.IHandlerResolver;
 import com.sap.bnet.services.IRemoteService;
@@ -43,18 +42,17 @@ public class receiveOrderController {
 	private IHandlerResolver handler;
 	
 	@RequestMapping("/receiveOrder") 
-	public ModelAndView receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
-		ModelAndView mv = new ModelAndView();
-		HashMap modelMap = new HashMap();
+	public void receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
 		if(StringUtils.isEmpty(order.getStreamingNo()) || StringUtils.isEmpty(order.getRand()) || StringUtils.isEmpty(order.getEncode())){
 			logger.error("Order request is Null [StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
-			return new ModelAndView("error");
+			return ;
+			//return new ModelAndView("error");
 		}
 		
+		PackageElement portalResultResponse = null;
 		try {
 			PackageElement portalRequest = remoteServices.getPortalRequest(order.getStreamingNo(), order.getRand(),order.getEncode());
 			OPFlag opFlag = portalRequest.getOpFlag();
-			PackageElement portalResultResponse = null;
 			if(opFlag == opFlag.CUST_OPEN_PRODUCT || opFlag == opFlag.CUST_CHANGE_PRODUCT || opFlag == opFlag.CUST_UNSUBSCRIBE_PRODUCT ){
 				portalResultResponse = remoteServices.queryCustomer(order.getStreamingNo(),portalRequest);
 			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
@@ -62,16 +60,26 @@ public class receiveOrderController {
 			}else if(opFlag == opFlag.AUTHENTICATION){
 				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequest);
 			}
-			
-			handler.handlerResult(request.getSession(), portalResultResponse);
-			
 		} catch (Exception e) {
-			logger.error("addOrder Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
+			logger.error("RemoteServices Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
+			HashMap modelMap = new HashMap();
 			modelMap.put("errormessage", e);
-			return new ModelAndView("error",modelMap);
+			return ;
+			//return new ModelAndView("error",modelMap);
 		}
 		
-		return mv;
+		try {
+			handler.handlerResult(request.getSession(), portalResultResponse);
+		} catch (Exception e) {
+			logger.error("HandlerResolver Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
+			HashMap modelMap = new HashMap();
+			modelMap.put("errormessage", e);
+			return ;
+			//return new ModelAndView("error",modelMap);
+		}
+		
+		return ;
+		//return new ModelAndView("success");
 	}
 	
 }
