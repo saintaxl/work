@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.sap.bnet.constant.USession;
 import com.sap.bnet.model.TrialRequest;
 import com.sap.bnet.model.TrialResponse;
-import com.sap.bnet.sldclient.SldServices;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
 
@@ -27,7 +26,7 @@ public class HandlerResolver implements IHandlerResolver {
 	public Logger logger = LoggerFactory.getLogger(HandlerResolver.class);
 	
 	@Autowired
-	private SldServices sldServices;
+	private ISldService sldServices;
 
 	public void handlerResult(HttpSession session ,PackageElement portalResultResponse) {
 		if(session.getAttribute(USession.USER_ID) == null){

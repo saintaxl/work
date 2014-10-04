@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sap.bnet.model.TrialRequest;
 import com.sap.bnet.model.TrialResponse;
-import com.sap.bnet.sldclient.SldServices;
+import com.sap.bnet.services.ISldService;
 
 /**
  * @title
@@ -30,7 +30,7 @@ import com.sap.bnet.sldclient.SldServices;
 public class CreateSubscriptionRequestTest {
 	
 	@Resource
-	private SldServices sldService;
+	private ISldService sldService;
 	
 	@Before
 	public void before(){

@@ -8,7 +8,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.sap.bnet.model.TrialRequest;
-import com.sap.bnet.sldclient.SldServices;
+import com.sap.bnet.services.ISldService;
 
 /**
  * @title
@@ -20,9 +20,9 @@ import com.sap.bnet.sldclient.SldServices;
  */
 public class EmailUniqueValidator implements Validator {
 
-	private SldServices sldServices;
+	private ISldService sldServices;
 	
-	public void setSldServices(SldServices sldServices) {
+	public void setSldServices(ISldService sldServices) {
 		this.sldServices = sldServices;
 	}
 

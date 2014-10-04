@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sap.bnet.sldclient.SldServices;
+import com.sap.bnet.services.ISldService;
 
 /**
  * @title
@@ -29,7 +29,7 @@ import com.sap.bnet.sldclient.SldServices;
 public class SldServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Resource
-	private SldServices sldService;
+	private ISldService sldService;
 
 	@Test
 	public void logonByServiceToken() {

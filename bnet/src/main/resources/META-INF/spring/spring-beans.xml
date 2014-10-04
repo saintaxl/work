@@ -24,7 +24,7 @@
 		<constructor-arg value="${sldrooturl}" />
 	</bean>
 	
-	<bean id="sldServices" class="com.sap.bnet.sldclient.SldServicesImpl">
+	<bean id="sldServices" class="com.sap.bnet.services.SldServiceImpl">
 		<property name="sldServiceToken" value="${servicetoken}"/>
 		<property name="odataManager" ref="odataClientManagerFactory"/>
 	</bean>

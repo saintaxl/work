@@ -1,7 +1,7 @@
 /**
  * © 2014 SAP AG. All rights reserved.
  */
-package com.sap.bnet.sldclient;
+package com.sap.bnet.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import com.sap.sbo.securestorage.ODCipher;
  * @version SldServicesImpl.java,v 1.0
  * @create Sep 28, 2014 1:15:16 PM
  */
-public class SldServicesImpl implements SldServices {
+public class SldServiceImpl implements ISldService {
 	
 	private ODataClientManager odataManager;
 	
