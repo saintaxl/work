@@ -6,7 +6,6 @@ package com.sap.bnet.controller;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -17,9 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sap.bnet.constant.USession;
+import com.sap.bnet.services.IHandlerResolver;
 import com.sap.bnet.services.IRemoteService;
-import com.sap.bnet.sldclient.SldServices;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
 
@@ -42,7 +40,7 @@ public class receiveOrderController {
 	private IRemoteService remoteServices;
 	
 	@Autowired
-	private SldServices sldServices;
+	private IHandlerResolver handler;
 	
 	@RequestMapping("/receiveOrder") 
 	public ModelAndView receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
@@ -65,10 +63,7 @@ public class receiveOrderController {
 				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequest);
 			}
 			
-			HttpSession session = request.getSession();
-			if(session.getAttribute(USession.USER_ID) == null){
-				sldServices.logonByServiceToken(session);
-			}
+			handler.handlerResult(request.getSession(), portalResultResponse);
 			
 		} catch (Exception e) {
 			logger.error("addOrder Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());

@@ -55,6 +55,14 @@ public enum OPFlag {
 		this.description = description;
 	}
 	
+	public String getCode() {
+		return this.code;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
 	public static OPFlag getNameByCode(String code) {
 		for (OPFlag codes : OPFlag.values()) {
 			if (codes.code.equals(code)) {

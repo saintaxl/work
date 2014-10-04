@@ -26,48 +26,93 @@ public class PackageElement implements Serializable{
 	
 	private static final long serialVersionUID = 1233567505377868105L;
 	
+	/**
+	 * 流水号
+	 */
 	@XmlElement(name="StreamingNo")
 	private String streamingNo;
 	
+	/**
+	 * 业务标示
+	 */
 	@XmlElement(name="OPFlag")
 	private OPFlag opFlag;
 	
+	/**
+	 * SI编码
+	 */
 	@XmlElement(name="SIID")
 	private String siId;
 	
+	/**
+	 * 当前时间戳
+	 */
 	@XmlElement(name="TimeStamp")
 	private String timeStamp;
 	
+	/**
+	 * 产品标识
+	 */
 	@XmlElement(name="ProductID")
 	private String productId;
 	
+	/**
+	 * 客户帐号
+	 */
 	@XmlElement(name="CustAccount")
 	private String custAccount;
 	
+	/**
+	 * 备注
+	 */
 	@XmlElement(name="Summary")
 	private String summary;
 	
+	/**
+	 * 应答返回状态
+	 */
 	@XmlElement(name="ReturnStatus")
 	private RetunCode returnStatus;
 	
+	/**
+	 * 客户产品计费标识
+	 */
 	@XmlElement(name="BizID")
 	private String bizID;
 	
+	/**
+	 * 产品查询密码
+	 */
 	@XmlElement(name="Password")
 	private String password;
 	
+	/**
+	 * 客户地区
+	 */
 	@XmlElement(name="AreaCode")
 	private String areaCode;
 	
+	/**
+	 * 客户标识
+	 */
 	@XmlElement(name="CustID")
 	private String custID;
 	
+	/**
+	 * 客户名称
+	 */
 	@XmlElement(name="CustName")
 	private String custName;
 	
+	/**
+	 * 接入号
+	 */
 	@XmlElement(name="AccessNo")
 	private String accessNo;
 	
+	/**
+	 * 用户帐号
+	 */
 	@XmlElement(name="UserID")
 	private String userId;
 	

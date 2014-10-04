@@ -17,16 +17,27 @@ import javax.xml.bind.annotation.XmlElement;
 public class Account implements Serializable{
 
 	private static final long serialVersionUID = -8731548173524424490L;
-	
+	/**
+	 * 用户帐号
+	 */
 	@XmlElement(name="UserID")
 	private String userID;
 	
+	/**
+	 * 手机的IMSI
+	 */
 	@XmlElement(name="IMSI")
 	private String imsi;
 	
+	/**
+	 * 用户类型 ：1管理员 2：普通用户
+	 */
 	@XmlElement(name="AccType")
 	private String accType;
 	
+	/**
+	 * 用户名称
+	 */
 	@XmlElement(name="AccName")
 	private String accName;
 
