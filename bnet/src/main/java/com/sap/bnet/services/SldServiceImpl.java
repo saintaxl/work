@@ -86,7 +86,6 @@ public class SldServiceImpl implements ISldService {
 		parameters.put("Email", request.getEmail());
 		parameters.put("Password", request.getPassword());
 		parameters.put("Country", request.getLocalization());
-		parameters.put("EmployeeCount", request.getEmployeeCount());
 
         // hard code to set default language for limited two country US and CN
 		parameters.put("DefaultLanguage", request.getDefaultLanguage());

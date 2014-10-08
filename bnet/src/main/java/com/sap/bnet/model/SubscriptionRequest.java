@@ -37,8 +37,6 @@ public class SubscriptionRequest implements Serializable {
 	
 	private Boolean includeDemoData;
 	
-	private Integer employeeCount;
-
 	public String getCompany() {
 		return company;
 	}
@@ -118,15 +116,5 @@ public class SubscriptionRequest implements Serializable {
 	public void setIncludeDemoData(Boolean includeDemoData) {
 		this.includeDemoData = includeDemoData;
 	}
-
-	public Integer getEmployeeCount() {
-		return employeeCount;
-	}
-
-	public void setEmployeeCount(Integer employeeCount) {
-		this.employeeCount = employeeCount;
-	}
-	
-	
 
 }
