@@ -83,7 +83,7 @@ public class XMLMessageTest extends AbstractJUnit4SpringContextTests  {
 		String request = ResourcesUtils.getResourceContent("classpath:/META-INF/User/AuthenticationResponse.xml");
 		assertNotNull(request);
 		PackageElement packageReq = JAXBUtils.unmarshal(request);
-		assertEquals(packageReq.getOpFlag(), OPFlag.AUTHENTICATION);
+		assertEquals(packageReq.getOpFlag(), OPFlag.USER_AUTHENTICATION);
 	}
 	
 	@Test

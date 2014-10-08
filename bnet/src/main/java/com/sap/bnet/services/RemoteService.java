@@ -131,7 +131,7 @@ public class RemoteService implements IRemoteService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
 		PackageElement portalResultRequest = new PackageElement();
 		portalResultRequest.setStreamingNo(streamingNo);
-		portalResultRequest.setOpFlag(OPFlag.LOGINON);
+		portalResultRequest.setOpFlag(OPFlag.USER_LOGON);
 		portalResultRequest.setTimeStamp(sdf.format(new Date()));
 		portalResultRequest.setProductId(productId);
 		portalResultRequest.setCustID(portalRequest.getCustID());

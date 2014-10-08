@@ -39,10 +39,10 @@ public enum OPFlag {
 	USER_QUERY("0204","用户查询"),
 	
 	@XmlEnumValue("0205")
-	AUTHENTICATION("0205","平台用户认证"),
+	USER_AUTHENTICATION("0205","平台用户认证"),
 	
 	@XmlEnumValue("0206")
-	LOGINON("0206","用户登录"),
+	USER_LOGON("0206","用户登录"),
 	
 	;
 	

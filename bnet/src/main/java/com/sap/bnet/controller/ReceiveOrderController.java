@@ -57,7 +57,7 @@ public class ReceiveOrderController {
 				portalResultResponse = remoteServices.queryCustomer(order.getStreamingNo(),portalRequest);
 			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
 				portalResultResponse = remoteServices.queryUserInfo(order.getStreamingNo(),portalRequest);
-			}else if(opFlag == opFlag.AUTHENTICATION){
+			}else if(opFlag == opFlag.USER_AUTHENTICATION){
 				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequest);
 			}
 		} catch (Exception e) {

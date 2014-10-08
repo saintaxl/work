@@ -54,10 +54,10 @@ public class BusinessHandler implements IBusinessHandler {
 				case USER_UNBOUND_PRODUCT:
 					
 					break;
-				case AUTHENTICATION:
+				case USER_AUTHENTICATION:
 					
 					break;
-				case LOGINON:
+				case USER_LOGON:
 				
 					break;
 				default:
