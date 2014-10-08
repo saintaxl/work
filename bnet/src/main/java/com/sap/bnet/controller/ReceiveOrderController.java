@@ -31,9 +31,9 @@ import com.sap.bnet.ws.model.PackageElement;
  */
 
 @Controller
-public class receiveOrderController {
+public class ReceiveOrderController {
 
-	public Logger logger = LoggerFactory.getLogger(receiveOrderController.class);
+	public Logger logger = LoggerFactory.getLogger(ReceiveOrderController.class);
 	
 	@Autowired
 	private IRemoteService remoteServices;
