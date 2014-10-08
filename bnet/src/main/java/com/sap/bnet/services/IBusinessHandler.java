@@ -11,8 +11,8 @@ import com.sap.bnet.ws.model.PackageElement;
  * @author Shawn
  *
  */
-public interface IHandlerResolver {
+public interface IBusinessHandler {
 
-	public void handlerResult(HttpSession session,PackageElement portalResultResponse);
+	public void handleResult(HttpSession session,PackageElement portalResultResponse);
 	
 }

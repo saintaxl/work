@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @version TrialResponse.java,v 1.0
  * @create Sep 28, 2014 4:23:08 PM
  */
-public class TrialResponse implements Serializable{
+public class SubscriptionResponse implements Serializable{
 
 	private static final long serialVersionUID = 5163857854521980959L;
 

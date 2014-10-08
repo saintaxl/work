@@ -6,7 +6,7 @@ package com.sap.bnet.validator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.sap.bnet.model.TrialRequest;
+import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.services.ISldService;
 
 /**
@@ -26,11 +26,11 @@ public class PasswordValidator implements Validator{
 	}
 
 	public boolean supports(Class<?> clazz) {
-		return TrialRequest.class.equals(clazz);
+		return SubscriptionRequest.class.equals(clazz);
 	}
 
 	public void validate(Object target, Errors errors) {
-		Integer status = sldServices.checkUserPassword((TrialRequest)target);
+		Integer status = sldServices.checkUserPassword((SubscriptionRequest)target);
 		System.out.println(status);
 	}
 

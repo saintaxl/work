@@ -32,13 +32,13 @@
 	<!-- <bean class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor"/>
 	<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>   -->
 	
-	<bean id="trialRequestValidator" class="com.sap.bnet.validator.EmailUniqueValidator">
+	<!-- <bean id="trialRequestValidator" class="com.sap.bnet.validator.EmailUniqueValidator">
 		<property name="sldServices" ref="sldServices"/>
 	</bean>
 	 
 	<bean id="passwordValidator" class="com.sap.bnet.validator.PasswordValidator">
 		<property name="sldServices" ref="sldServices"/>
-	</bean> 
+	</bean>  -->
 
 
 </beans>

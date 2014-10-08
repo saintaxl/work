@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import com.sap.bnet.constant.USession;
-import com.sap.bnet.model.TrialRequest;
-import com.sap.bnet.model.TrialResponse;
+import com.sap.bnet.model.SubscriptionRequest;
+import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.sbo.odatathinclient.ODataClientManager;
 import com.sap.sbo.securestorage.ODCipher;
 
@@ -56,7 +56,7 @@ public class SldServiceImpl implements ISldService {
 		return res;
 	}
 
-	public Integer checkUserPassword(TrialRequest target) {
+	public Integer checkUserPassword(SubscriptionRequest target) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		
 		String firstName = target.getFirstName();
@@ -77,7 +77,7 @@ public class SldServiceImpl implements ISldService {
         return odataManager.invokeAction("CheckUserPasswordReturnWithCode", parameters, int.class);
 	}
 	
-	public TrialResponse createSubscriptionRequest(TrialRequest request) {
+	public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("CompanyName", request.getCompany());
 		parameters.put("FirstName", request.getFirstName());
@@ -86,6 +86,7 @@ public class SldServiceImpl implements ISldService {
 		parameters.put("Email", request.getEmail());
 		parameters.put("Password", request.getPassword());
 		parameters.put("Country", request.getLocalization());
+		parameters.put("EmployeeCount", request.getEmployeeCount());
 
         // hard code to set default language for limited two country US and CN
 		parameters.put("DefaultLanguage", request.getDefaultLanguage());

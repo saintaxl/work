@@ -13,8 +13,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.sap.bnet.model.TrialRequest;
-import com.sap.bnet.model.TrialResponse;
+import com.sap.bnet.model.SubscriptionRequest;
+import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.bnet.services.ISldService;
 
 /**
@@ -39,8 +39,8 @@ public class CreateSubscriptionRequestTest {
 
 	@Test
 	public void createSubscriptionRequestTest() {
-		TrialRequest request = new TrialRequest();
-		TrialResponse result = sldService.createSubscriptionRequest(request);
+		SubscriptionRequest request = new SubscriptionRequest();
+		SubscriptionResponse result = sldService.createSubscriptionRequest(request);
 		assertNotNull(result);
 		//assertEquals(result, true);
 	}

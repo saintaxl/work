@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sap.bnet.services.IHandlerResolver;
+import com.sap.bnet.services.IBusinessHandler;
 import com.sap.bnet.services.IRemoteService;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
@@ -39,7 +39,7 @@ public class ReceiveOrderController {
 	private IRemoteService remoteServices;
 	
 	@Autowired
-	private IHandlerResolver handler;
+	private IBusinessHandler handler;
 	
 	@RequestMapping("/receiveOrder") 
 	public void receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
@@ -69,7 +69,7 @@ public class ReceiveOrderController {
 		}
 		
 		try {
-			handler.handlerResult(request.getSession(), portalResultResponse);
+			handler.handleResult(request.getSession(), portalResultResponse);
 		} catch (Exception e) {
 			logger.error("HandlerResolver Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
 			HashMap modelMap = new HashMap();

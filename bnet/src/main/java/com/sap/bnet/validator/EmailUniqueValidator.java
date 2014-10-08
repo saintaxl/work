@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.sap.bnet.model.TrialRequest;
+import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.services.ISldService;
 
 /**
@@ -27,12 +27,12 @@ public class EmailUniqueValidator implements Validator {
 	}
 
 	public boolean supports(Class<?> clazz) {
-		return TrialRequest.class.equals(clazz);
+		return SubscriptionRequest.class.equals(clazz);
 	}
 
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "username", null, "Username is empty.");
-		TrialRequest user = (TrialRequest) obj;
+		SubscriptionRequest user = (SubscriptionRequest) obj;
 		boolean isemail = sldServices.isEmailUnique(user.getEmail());
 		System.out.println(isemail);
 	}

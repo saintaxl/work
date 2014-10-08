@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sap.bnet.constant.USession;
-import com.sap.bnet.model.TrialRequest;
-import com.sap.bnet.model.TrialResponse;
+import com.sap.bnet.model.SubscriptionRequest;
+import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
 
@@ -21,14 +21,14 @@ import com.sap.bnet.ws.model.PackageElement;
  *
  */
 @Service
-public class HandlerResolver implements IHandlerResolver {
+public class BusinessHandler implements IBusinessHandler {
 	
-	public Logger logger = LoggerFactory.getLogger(HandlerResolver.class);
+	public Logger logger = LoggerFactory.getLogger(BusinessHandler.class);
 	
 	@Autowired
 	private ISldService sldServices;
 
-	public void handlerResult(HttpSession session ,PackageElement portalResultResponse) {
+	public void handleResult(HttpSession session ,PackageElement portalResultResponse) {
 		if(session.getAttribute(USession.USER_ID) == null){
 			sldServices.logonByServiceToken(session);
 		}
@@ -37,8 +37,9 @@ public class HandlerResolver implements IHandlerResolver {
 		try {
 			switch (opFlag) {
 				case CUST_OPEN_PRODUCT:
-					TrialRequest trialRequest = new TrialRequest();
-					TrialResponse trialResponse = sldServices.createSubscriptionRequest(trialRequest);
+					SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+					subscriptionRequest.setCompany(portalResultResponse.getCustName());
+					SubscriptionResponse subscriptionResponse = sldServices.createSubscriptionRequest(subscriptionRequest);
 					break;
 				case CUST_CHANGE_PRODUCT:
 					

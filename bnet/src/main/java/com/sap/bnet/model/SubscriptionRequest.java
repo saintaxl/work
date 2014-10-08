@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @version UserSubscription.java,v 1.0
  * @create Sep 28, 2014 3:29:49 PM
  */
-public class TrialRequest implements Serializable {
+public class SubscriptionRequest implements Serializable {
 
 	private static final long serialVersionUID = -3464987053777487477L;
 
@@ -36,6 +36,8 @@ public class TrialRequest implements Serializable {
 	private String captcha;
 	
 	private Boolean includeDemoData;
+	
+	private Integer employeeCount;
 
 	public String getCompany() {
 		return company;
@@ -115,6 +117,14 @@ public class TrialRequest implements Serializable {
 
 	public void setIncludeDemoData(Boolean includeDemoData) {
 		this.includeDemoData = includeDemoData;
+	}
+
+	public Integer getEmployeeCount() {
+		return employeeCount;
+	}
+
+	public void setEmployeeCount(Integer employeeCount) {
+		this.employeeCount = employeeCount;
 	}
 	
 	

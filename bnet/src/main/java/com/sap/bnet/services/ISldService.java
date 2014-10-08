@@ -5,8 +5,8 @@ package com.sap.bnet.services;
 
 import javax.servlet.http.HttpSession;
 
-import com.sap.bnet.model.TrialRequest;
-import com.sap.bnet.model.TrialResponse;
+import com.sap.bnet.model.SubscriptionRequest;
+import com.sap.bnet.model.SubscriptionResponse;
 
 
 /**
@@ -23,8 +23,8 @@ public interface ISldService {
     
     public boolean isEmailUnique(String email);
     
-    public Integer checkUserPassword(TrialRequest target);
+    public Integer checkUserPassword(SubscriptionRequest target);
     
-    public TrialResponse createSubscriptionRequest(TrialRequest request);
+    public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request);
     
 }
