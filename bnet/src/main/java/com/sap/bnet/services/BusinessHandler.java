@@ -37,9 +37,7 @@ public class BusinessHandler implements IBusinessHandler {
 		try {
 			switch (opFlag) {
 				case CUST_OPEN_PRODUCT:
-					SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-					subscriptionRequest.setCompany(portalResultResponse.getCustName());
-					SubscriptionResponse subscriptionResponse = sldServices.createSubscriptionRequest(subscriptionRequest);
+					openProduction4Cust(portalResultResponse);
 					break;
 				case CUST_CHANGE_PRODUCT:
 					
@@ -70,6 +68,12 @@ public class BusinessHandler implements IBusinessHandler {
 			throw new RuntimeException("Call SLD Service exception:",e);
 		}
 
+	}
+
+	private void openProduction4Cust(PackageElement portalResultResponse) {
+		SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+		subscriptionRequest.setCompany(portalResultResponse.getCustName());
+		SubscriptionResponse subscriptionResponse = sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
 
 }
