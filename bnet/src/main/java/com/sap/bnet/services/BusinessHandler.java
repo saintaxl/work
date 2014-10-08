@@ -28,22 +28,22 @@ public class BusinessHandler implements IBusinessHandler {
 	@Autowired
 	private ISldService sldServices;
 
-	public void handleResult(HttpSession session ,PackageElement portalResultResponse) {
+	public void handleResult(HttpSession session ,PackageElement dataPackage) {
 		if(session.getAttribute(USession.USER_ID) == null){
 			sldServices.logonByServiceToken(session);
 		}
 		
-		OPFlag opFlag = portalResultResponse.getOpFlag();
+		OPFlag opFlag = dataPackage.getOpFlag();
 		try {
 			switch (opFlag) {
 				case CUST_OPEN_PRODUCT:
-					openProduction4Cust(portalResultResponse);
+					openProduction4Cust(dataPackage);
 					break;
 				case CUST_CHANGE_PRODUCT:
-					
+					changeProduction4Cust(dataPackage);
 					break;
 				case CUST_UNSUBSCRIBE_PRODUCT:
-					
+					unsubscribeProduction4Cust(dataPackage);
 					break;
 				case USER_BOUND_PRODUCT:
 					
@@ -70,10 +70,15 @@ public class BusinessHandler implements IBusinessHandler {
 
 	}
 
-	private void openProduction4Cust(PackageElement portalResultResponse) {
+	private void openProduction4Cust(PackageElement dataPackage) {
 		SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-		subscriptionRequest.setCompany(portalResultResponse.getCustName());
+		subscriptionRequest.setCompany(dataPackage.getCustName());
 		SubscriptionResponse subscriptionResponse = sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
+	
+	private void changeProduction4Cust(PackageElement dataPackage) {
+	}
 
+	private void unsubscribeProduction4Cust(PackageElement dataPackage) {
+	}
 }

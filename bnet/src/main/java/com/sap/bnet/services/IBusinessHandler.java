@@ -13,6 +13,6 @@ import com.sap.bnet.ws.model.PackageElement;
  */
 public interface IBusinessHandler {
 
-	public void handleResult(HttpSession session,PackageElement portalResultResponse);
+	public void handleResult(HttpSession session,PackageElement dataPackage);
 	
 }
