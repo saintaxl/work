@@ -21,21 +21,37 @@ public class SubscriptionRequest implements Serializable {
 	
 	private String email;
 	
-	private String password;
+	private String password = "123456";
 	
-	private String firstName;
+	private String firstName="名";
 	
-	private String lastName;
+	private String lastName="姓";
 	
-	private String localization;
-	
-	private String defaultLanguage;
+	private String defaultLanguage = "15";
 	
 	private String mobile;
 
 	private String captcha;
 	
-	private Boolean includeDemoData;
+	private String country = "CN";
+	
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getPackageType() {
+		return packageType;
+	}
+
+	public void setPackageType(String packageType) {
+		this.packageType = packageType;
+	}
+
+	private String packageType = "Suite";
 	
 	public String getCompany() {
 		return company;
@@ -77,14 +93,6 @@ public class SubscriptionRequest implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getLocalization() {
-		return localization;
-	}
-
-	public void setLocalization(String localization) {
-		this.localization = localization;
-	}
-
 	public String getDefaultLanguage() {
 		return defaultLanguage;
 	}
@@ -107,14 +115,6 @@ public class SubscriptionRequest implements Serializable {
 
 	public void setCaptcha(String captcha) {
 		this.captcha = captcha;
-	}
-
-	public Boolean getIncludeDemoData() {
-		return includeDemoData;
-	}
-
-	public void setIncludeDemoData(Boolean includeDemoData) {
-		this.includeDemoData = includeDemoData;
 	}
 
 }

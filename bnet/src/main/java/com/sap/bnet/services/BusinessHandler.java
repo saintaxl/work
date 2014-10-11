@@ -3,6 +3,8 @@
  */
 package com.sap.bnet.services;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.model.PackageElement;
+import com.sap.bnet.ws.model.Product;
 
 /**
  * @author Shawn
@@ -28,22 +31,24 @@ public class BusinessHandler implements IBusinessHandler {
 	@Autowired
 	private ISldService sldServices;
 
-	public void handleResult(HttpSession session ,PackageElement dataPackage) {
+	public void handleResult(HttpSession session ,PackageElement portalRequestResponse,PackageElement portalResultResponse) {
 		if(session.getAttribute(USession.USER_ID) == null){
 			sldServices.logonByServiceToken(session);
 		}
 		
-		OPFlag opFlag = dataPackage.getOpFlag();
+		openProduction4Cust(portalResultResponse);
+		
+		OPFlag opFlag = portalRequestResponse.getOpFlag();
 		try {
 			switch (opFlag) {
 				case CUST_OPEN_PRODUCT:
-					openProduction4Cust(dataPackage);
+					openProduction4Cust(portalResultResponse);
 					break;
 				case CUST_CHANGE_PRODUCT:
-					changeProduction4Cust(dataPackage);
+					changeProduction4Cust(portalResultResponse);
 					break;
 				case CUST_UNSUBSCRIBE_PRODUCT:
-					unsubscribeProduction4Cust(dataPackage);
+					unsubscribeProduction4Cust(portalResultResponse);
 					break;
 				case USER_BOUND_PRODUCT:
 					
@@ -64,7 +69,7 @@ public class BusinessHandler implements IBusinessHandler {
 					break;
 			}
 		} catch (Exception e) {
-			logger.error("Call SLD Service error by OPFlag {}",opFlag.getCode());
+			logger.error("Call SLD Service error by OPFlag {}",opFlag.getCode(),e);
 			throw new RuntimeException("Call SLD Service exception:",e);
 		}
 
@@ -73,12 +78,56 @@ public class BusinessHandler implements IBusinessHandler {
 	private void openProduction4Cust(PackageElement dataPackage) {
 		SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
 		subscriptionRequest.setCompany(dataPackage.getCustName());
-		SubscriptionResponse subscriptionResponse = sldServices.createSubscriptionRequest(subscriptionRequest);
+		
+		Product email = getEmail(dataPackage);
+		subscriptionRequest.setEmail(email.getProductValue());
+		sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
 	
 	private void changeProduction4Cust(PackageElement dataPackage) {
+		Product email = getEmail(dataPackage);
+		Product license = getLicense(dataPackage);
+		sldServices.changeCustomer(dataPackage.getCustName(), email.getProductValue(),Integer.valueOf(license.getProductValue()));
 	}
 
 	private void unsubscribeProduction4Cust(PackageElement dataPackage) {
+		Product email = getEmail(dataPackage);
+		sldServices.unsubscribeCustomer(dataPackage.getCustName(), email.getProductValue());
+	}
+
+	private Product getEmail(PackageElement dataPackage) {
+		Product email = null;
+		List<Product> products = dataPackage.getProducts();
+		if(null != products && products.size()>0){
+			// 358310770030000000 : Email attribute type
+			for(Product pro : products){
+				if(pro.getProductType().equals("358310770030000000")){
+					email = pro;
+					break;
+				}
+			}
+		}
+		if(null == email){
+			logger.error("Email not found!");
+		}
+		return email;
+	}
+	
+	private Product getLicense(PackageElement dataPackage) {
+		Product license = null;
+		List<Product> products = dataPackage.getProducts();
+		if(null != products && products.size()>0){
+			// 358310760020000000 : License attribute type
+			for(Product pro : products){
+				if(pro.getProductType().equals("358310760020000000")){
+					license = pro;
+					break;
+				}
+			}
+		}
+		if(null == license){
+			logger.error("License count not found!");
+		}
+		return license;
 	}
 }

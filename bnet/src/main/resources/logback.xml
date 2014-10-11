@@ -19,7 +19,7 @@
 
 	<logger name="com.sap.bnet">
 		<level value="debug" />
-		<appender-ref ref="log.console" />
+		<appender-ref ref="log.file" />
 	</logger>
 
 	<logger name="org.apache.axis2">

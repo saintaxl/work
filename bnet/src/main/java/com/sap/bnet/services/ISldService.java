@@ -27,4 +27,8 @@ public interface ISldService {
     
     public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request);
     
+    public void changeCustomer(String custName, String email,Integer licenseCount);
+    
+    public void unsubscribeCustomer(String custName, String email);
+    
 }

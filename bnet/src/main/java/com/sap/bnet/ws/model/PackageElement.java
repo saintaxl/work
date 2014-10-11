@@ -4,13 +4,16 @@
 package com.sap.bnet.ws.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.sap.bnet.ws.constant.OPFlag;
 import com.sap.bnet.ws.constant.RetunCode;
@@ -43,6 +46,9 @@ public class PackageElement implements Serializable{
 	 */
 	@XmlElement(name="SIID")
 	private String siId;
+	
+	@XmlElement(name="OfferID")
+	private String offerId;
 	
 	/**
 	 * 当前时间戳
@@ -117,12 +123,12 @@ public class PackageElement implements Serializable{
 	private String userId;
 	
 	@XmlElementWrapper(name="ProductInfo")
-    @XmlElement(name="ProductAttribute")
+    @XmlElement(name="Product")
 	private List<Product> products;
 	
     @XmlElement(name="AccountInfo")
 	private List<Account> accounts;
-	
+    
 	public List<Account> getAccounts() {
 		return accounts;
 	}
@@ -254,13 +260,23 @@ public class PackageElement implements Serializable{
 	public String getUserId() {
 		return userId;
 	}
-
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	public String getOfferId() {
+		return offerId;
+	}
+
+	public void setOfferId(String offerId) {
+		this.offerId = offerId;
 	}
 
 	public String toXML(){
 		return JAXBUtils.marshal(this);
 	}
+
+	
 	
 }

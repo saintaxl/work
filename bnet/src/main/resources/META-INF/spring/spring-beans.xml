@@ -20,13 +20,14 @@
 	</bean>
 
 
-	<bean id="odataClientManagerFactory" class="com.sap.sbo.odatathinclient.ODataClientManagerFactory" factory-method="getODataClientManager">
+	<!-- <bean id="odataClientManagerFactory" class="com.sap.sbo.odatathinclient.ODataClientManagerFactory" factory-method="getODataClientManager">
 		<constructor-arg value="${sldrooturl}" />
-	</bean>
+	</bean> -->
 	
 	<bean id="sldServices" class="com.sap.bnet.services.SldServiceImpl">
 		<property name="sldServiceToken" value="${servicetoken}"/>
-		<property name="odataManager" ref="odataClientManagerFactory"/>
+		<property name="sldrooturl" value="${sldrooturl}"/>
+<!-- 		<property name="odataManager" ref="odataClientManagerFactory"/> -->
 	</bean>
 	
 	<!-- <bean class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor"/>

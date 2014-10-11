@@ -36,7 +36,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 	@Autowired
 	private ProdServiceService tradeWebService;
 	
-	public PackageElement getPortalRequest(String streamingNo,String randNo){
+	public String getPortalRequest(String streamingNo,String randNo){
 		logger.debug("Call remote service [getPortalRequest] para [streamingNo:{} , randNo:{}]",streamingNo,randNo);
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 		OMElement method = factory.createOMElement(new QName("getPortalRequest"));
@@ -68,17 +68,17 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		}
 		
 		String portalRequestReturn = returnElement.getText();
-		logger.debug("Call remote service [getPortalRequest] result XML :{}", portalRequestReturn);
+		logger.info("Call remote service [getPortalRequest] result XML :{}", portalRequestReturn);
 		if(StringUtils.isEmpty(portalRequestReturn)){
 			logger.error("no return data as xml of remote service by getPortalRequest streamingNo: {} randNo: {}",streamingNo,randNo);
 			throw new RuntimeException("no return data as xml of remote service by getPortalRequest");
 		}
 		 
-		return JAXBUtils.unmarshal(portalRequestReturn);
+		return portalRequestReturn;
 	}
 
 	public String getEncodeString(String decode) {
-		logger.debug("Call remote service [getEncodeString] para [decode:{}]",decode);
+		logger.info("Call remote service [getEncodeString] para [decode:{}]",decode);
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 		OMElement method = factory.createOMElement(new QName("getEncodeString"));
 		
@@ -107,7 +107,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		}
 		
 		String encode = returnElement.getText();
-		logger.debug("Call remote service [getEncodeString] result XML :{}", encode);
+		logger.info("Call remote service [getEncodeString] result XML :{}", encode);
 		if(StringUtils.isEmpty(encode)){
 			logger.error("no return data as encode of remote service by getEncodeString decode:{}",decode);
 			throw new RuntimeException("no return data as encode of remote service by getEncodeString");
@@ -118,7 +118,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 
 	@Override
 	public PackageElement getPortalResult(String reqXML) {
-		logger.debug("Call remote service [getPortalResult] para [reqXML:{}]",reqXML);
+		logger.info("Call remote service [getPortalResult] para [reqXML:{}]",reqXML);
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 		OMElement method = factory.createOMElement(new QName("getPortalResult"));
 		
@@ -147,7 +147,7 @@ public class TradeServiceFacade implements ITradeServiceFacade{
 		}
 		
 		String portalResultReturn = returnElement.getText();
-		logger.debug("Call remote service [getPortalResult] result :{}", portalResultReturn);
+		logger.info("Call remote service [getPortalResult] result :{}", portalResultReturn);
 		if(StringUtils.isEmpty(portalResultReturn)){
 			logger.error("no return data of remote service by getPortalResult reqXML:{}",reqXML);
 			throw new RuntimeException("no return data of remote service by getPortalResult");

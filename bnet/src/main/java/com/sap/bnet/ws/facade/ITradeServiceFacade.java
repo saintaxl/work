@@ -15,7 +15,7 @@ import com.sap.bnet.ws.model.PackageElement;
  */
 public interface ITradeServiceFacade {
 
-	public PackageElement getPortalRequest(String streamingNo,String randNo);
+	public String getPortalRequest(String streamingNo,String randNo);
 	
 	public String getEncodeString(String decode);
 

@@ -19,6 +19,7 @@ import com.sap.bnet.ws.constant.RetunCode;
 import com.sap.bnet.ws.facade.ITradeServiceFacade;
 import com.sap.bnet.ws.model.Account;
 import com.sap.bnet.ws.model.PackageElement;
+import com.sap.bnet.ws.utils.JAXBUtils;
 
 /**
  * @title 
@@ -49,8 +50,9 @@ public class RemoteService implements IRemoteService {
 	protected ITradeServiceFacade tradefacade;
 
 	public PackageElement getPortalRequest(String streamingNo, String rand,String encode) {
-		PackageElement packages = tradefacade.getPortalRequest(streamingNo, rand);
-		String ciphertext = tradefacade.getEncodeString(packages.toXML());
+		String portalRequestReturn = tradefacade.getPortalRequest(streamingNo, rand);
+		String ciphertext = tradefacade.getEncodeString(portalRequestReturn);
+		PackageElement packages = JAXBUtils.unmarshal(portalRequestReturn);
 		if(!encode.equals(ciphertext)){
 			PackageElement portalResultRequest = new PackageElement();
 			portalResultRequest.setStreamingNo(streamingNo);
@@ -83,8 +85,8 @@ public class RemoteService implements IRemoteService {
 		portalResultRequest.setOpFlag(OPFlag.CUST_QUERY);
 		portalResultRequest.setSiId(siId);
 		portalResultRequest.setTimeStamp(sdf.format(new Date()));
-		portalResultRequest.setBizID(bizId);
-		portalResultRequest.setAreaCode("");
+		portalResultRequest.setBizID(portalRequest.getBizID());
+		portalResultRequest.setAreaCode(portalRequest.getAreaCode());
 		portalResultRequest.setProductId(productId);
 		portalResultRequest.setPassword(password);
 		portalResultRequest.setCustID(portalRequest.getCustID());

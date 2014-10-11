@@ -22,6 +22,11 @@ public class SubscriptionResponse implements Serializable{
 	private String loginToken;
 	
 	private String customerToken;
+	
+	public SubscriptionResponse(Integer taskId, String loginToken){
+		this.taskId = taskId;
+		this.loginToken = loginToken;
+	}
 
 	public Integer getTaskId() {
 		return taskId;
