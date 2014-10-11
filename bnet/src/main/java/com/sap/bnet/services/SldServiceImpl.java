@@ -3,22 +3,58 @@
  */
 package com.sap.bnet.services;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.map.JsonSerializable;
 import org.core4j.Enumerable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sap.bnet.constant.USession;
 import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.model.SubscriptionResponse;
+import com.sap.bnet.utils.JsonUtils;
 import com.sap.businessone.odata4j.consumer.ODataConsumer;
 import com.sap.businessone.odata4j.core.OComplexObject;
 import com.sap.businessone.odata4j.core.OComplexObjects;
@@ -55,6 +91,10 @@ public class SldServiceImpl implements ISldService {
 	private String sldrooturl;
 	
 	private ODataConsumer consumer;
+	
+	private HttpClient client;
+	
+	public Logger logger = LoggerFactory.getLogger(SldServiceImpl.class);
 
     public void setConsumer(ODataConsumer consumer) {
         this.consumer = consumer;
@@ -73,16 +113,25 @@ public class SldServiceImpl implements ISldService {
     }
 
 	public boolean logonByServiceToken(HttpSession session) {
-		OObject oToken = OSimpleObjects.create(EdmSimpleType.STRING, ODCipher.getInstance().decrypt(sldServiceToken));
-        Enumerable<?> e = consumer.callFunction("LogonByServiceToken")
-                .parameter(OFunctionParameters.create("Token", oToken)).execute();
-        Boolean result = this.getSimpleResultValue(e, boolean.class);
-        
-        if(session!=null && result){
-        	session.setAttribute(USession.USER_ID, result);
-        	session.setMaxInactiveInterval(60 * 20);
-        }
-        return result;
+		try{
+			HttpPost postMethod = new HttpPost(sldrooturl+"LogonByServiceToken");
+			postMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			postMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			
+			postMethod.setEntity(new StringEntity("{Token:'"+ODCipher.getInstance().decrypt(sldServiceToken)+"'}",ContentType.APPLICATION_JSON));
+			HttpResponse response = this.client.execute(postMethod);
+			String reponseBody = EntityUtils.toString(response.getEntity(),"UTF-8");
+			logger.info("Call login response: ["+reponseBody+"].");
+			JSonObject object = JsonUtils.toObject(reponseBody, JSonObject.class);
+			boolean logonByServiceToken = object.getD().isLogonByServiceToken();
+			if(session!=null && logonByServiceToken){
+	        	session.setAttribute(USession.USER_ID, logonByServiceToken);
+	        	session.setMaxInactiveInterval(60 * 20);
+	        }
+	        return logonByServiceToken;
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	public boolean isEmailUnique(String email) {
@@ -196,6 +245,28 @@ public class SldServiceImpl implements ISldService {
     }
 	
 	private void createConsumer() {
+		SSLSocketFactory sf;
+        try {
+               sf = new SSLSocketFactory(new TrustStrategy() {
+                     @Override
+                     public boolean isTrusted(X509Certificate[] chain, String authType) {
+                            return true;
+                     }
+               }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        } catch (KeyManagementException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException e) {
+               throw new RuntimeException(e);
+        }
+
+        SchemeRegistry registry = new SchemeRegistry();
+        registry.register(new Scheme("https", 443, sf ));
+        registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+        PoolingClientConnectionManager connManager = new PoolingClientConnectionManager(registry);
+        connManager.setDefaultMaxPerRoute(50);
+        connManager.setMaxTotal(200);
+        HttpParams httpParams  = new BasicHttpParams(); 
+        HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
+
+		client = new DefaultHttpClient(connManager,httpParams);
         if (consumer == null) {
             consumer = ODataCxfConsumer.create(this.addEndSlash(this.sldrooturl));
         }
@@ -222,5 +293,22 @@ public class SldServiceImpl implements ISldService {
     @PostConstruct
     public void afterPropertiesSet() {
         createConsumer();
+    }
+    
+    class MyX509TrustManager implements X509TrustManager{
+
+		@Override
+		public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+    	
     }
 }
