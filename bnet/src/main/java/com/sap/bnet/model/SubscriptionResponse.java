@@ -17,39 +17,34 @@ public class SubscriptionResponse implements Serializable{
 
 	private static final long serialVersionUID = 5163857854521980959L;
 
-	private Integer taskId;
+	private Integer TaskId;
 	
-	private String loginToken;
+	private String LoginToken;
 	
-	private String customerToken;
+	private String CustomerToken;
 	
-	public SubscriptionResponse(Integer taskId, String loginToken){
-		this.taskId = taskId;
-		this.loginToken = loginToken;
-	}
-
 	public Integer getTaskId() {
-		return taskId;
+		return TaskId;
 	}
 
 	public void setTaskId(Integer taskId) {
-		this.taskId = taskId;
+		TaskId = taskId;
 	}
 
 	public String getLoginToken() {
-		return loginToken;
+		return LoginToken;
 	}
 
 	public void setLoginToken(String loginToken) {
-		this.loginToken = loginToken;
+		LoginToken = loginToken;
 	}
 
 	public String getCustomerToken() {
-		return customerToken;
+		return CustomerToken;
 	}
 
 	public void setCustomerToken(String customerToken) {
-		this.customerToken = customerToken;
+		CustomerToken = customerToken;
 	}
-	
+
 }

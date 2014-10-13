@@ -77,10 +77,12 @@ public class BusinessHandler implements IBusinessHandler {
 
 	private void openProduction4Cust(PackageElement dataPackage) {
 		SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-		subscriptionRequest.setCompany(dataPackage.getCustName());
-		
-		Product email = getEmail(dataPackage);
-		subscriptionRequest.setEmail(email.getProductValue());
+		subscriptionRequest.setCompany("Demo");
+		subscriptionRequest.setEmail("demo@sap.com");
+//		subscriptionRequest.setCompany(dataPackage.getCustName());
+//		
+//		Product email = getEmail(dataPackage);
+//		subscriptionRequest.setEmail(email.getProductValue());
 		sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
 	

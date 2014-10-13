@@ -21,11 +21,11 @@ public class SubscriptionRequest implements Serializable {
 	
 	private String email;
 	
-	private String password = "123456";
+	private String password = "Initial4!";
 	
-	private String firstName="名";
+	private String firstName="first name";
 	
-	private String lastName="姓";
+	private String lastName="last name";
 	
 	private String defaultLanguage = "15";
 	

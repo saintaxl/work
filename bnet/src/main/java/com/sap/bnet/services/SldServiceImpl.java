@@ -52,6 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.bnet.constant.USession;
+import com.sap.bnet.model.JSonObject;
 import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.bnet.utils.JsonUtils;
@@ -163,24 +164,38 @@ public class SldServiceImpl implements ISldService {
 	}
 	
 	public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request) {
-		EdmDataServices edmDataServices = consumer.getMetadata();
-        EdmComplexType trailRequestParam = edmDataServices.findEdmComplexType("SubscriptionRequestParam");
-
-        List<OProperty<?>> paramProperties = new ArrayList<OProperty<?>>();
-        paramProperties.add(OProperties.string("CompanyName", request.getCompany()));
-        paramProperties.add(OProperties.string("FirstName", request.getFirstName()));
-        paramProperties.add(OProperties.string("LastName", request.getLastName()));
-        paramProperties.add(OProperties.string("Mobile", request.getMobile()));
-        paramProperties.add(OProperties.string("Email", request.getEmail()));
-        paramProperties.add(OProperties.string("Password", request.getPassword()));
-        paramProperties.add(OProperties.string("Country", request.getCountry()));
-        paramProperties.add(OProperties.string("DefaultLanguage", request.getDefaultLanguage()));
-        
-        OComplexObject oObj = OComplexObjects.create(trailRequestParam, paramProperties);
-
-        Enumerable<?> e = consumer.callFunction("CreateSubscriptionRequest")
-                .parameter(OFunctionParameters.create("SubscriptionRequest", oObj)).execute();
-        return extractTrialSubscriptionRequestResponse(e);
+		try{
+			HttpPost postMethod = new HttpPost(sldrooturl+"CreateSubscriptionRequest");
+			postMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			postMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			
+			String company = request.getCompany()==null?"":request.getCompany();
+			String firstName = request.getFirstName()==null?"":request.getFirstName();
+			String lastName = request.getLastName()==null?"":request.getLastName();
+			String mobile = request.getMobile()==null?"":request.getMobile();
+			String email = request.getEmail()==null?"":request.getEmail();
+			String password = request.getPassword()==null?"":request.getPassword();
+			String country = request.getCountry()==null?"":request.getCountry();
+			String defaultLanguage = request.getDefaultLanguage()==null?"":request.getDefaultLanguage();
+			String requestBody = "{SubscriptionRequest:{CompanyName:'"+company+"'," +
+					"FirstName:'"+firstName+"'," +
+					"LastName:'"+lastName+"'," +
+					"Mobile:'"+mobile+"'," +
+					"Email:'"+email+"'," +
+					"Password:'"+password+"'," +
+					"Country:'"+country+"'," +
+					"DefaultLanguage:'"+defaultLanguage+"'}}";
+			logger.info("Call CreateSubscriptionRequest params: ["+requestBody+"].");
+			StringEntity stringEntity = new StringEntity(requestBody,ContentType.APPLICATION_JSON);
+			postMethod.setEntity(stringEntity);
+			HttpResponse response = this.client.execute(postMethod);
+			String reponseBody = EntityUtils.toString(response.getEntity(),"UTF-8");
+			logger.info("Call CreateSubscriptionRequest response: ["+reponseBody+"].");
+			JSonObject object = JsonUtils.toObject(reponseBody, JSonObject.class);
+			return object.getD().getCreateSubscriptionRequest();
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public void changeCustomer(String custName, String email,Integer licenseCount){
@@ -216,33 +231,6 @@ public class SldServiceImpl implements ISldService {
 			this.consumer.updateEntity(tenant);
 		}
 	}  
-	
-	public SubscriptionResponse extractTrialSubscriptionRequestResponse(Enumerable<?> e) {
-        Object first = e.first();
-        Integer taskId = null;
-        String loginToken = null;
-        if (first instanceof OComplexObject) {
-            OComplexObject comp = (OComplexObject) first;
-            taskId = comp.getProperty("TaskId", Integer.class).getValue();
-            try {
-                loginToken = comp.getProperty("LoginToken", String.class).getValue();
-            } catch (Exception ex) {
-                    throw ex;
-            }
-        }
-        return new SubscriptionResponse(taskId, loginToken);
-    }
-
-	public <T> T getSimpleResultValue(Enumerable<?> e, Class<T> type) {
-        for (Object o : e) {
-            if (OSimpleObject.class.isAssignableFrom(o.getClass())) {
-                @SuppressWarnings("unchecked")
-                OSimpleObject<T> value = (OSimpleObject<T>) o;
-                return value.getValue();
-            }
-        }
-        return null;
-    }
 	
 	private void createConsumer() {
 		SSLSocketFactory sf;

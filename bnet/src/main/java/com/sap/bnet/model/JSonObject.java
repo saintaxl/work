@@ -1,4 +1,4 @@
-package com.sap.bnet.services;
+package com.sap.bnet.model;
 
 import java.io.Serializable;
 
