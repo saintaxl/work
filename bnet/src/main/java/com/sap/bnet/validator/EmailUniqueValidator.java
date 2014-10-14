@@ -33,8 +33,8 @@ public class EmailUniqueValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "username", null, "Username is empty.");
 		SubscriptionRequest user = (SubscriptionRequest) obj;
-		boolean isemail = sldServices.isEmailUnique(user.getEmail());
-		System.out.println(isemail);
+		//boolean isemail = sldServices.isEmailUnique(user.getEmail());
+		//System.out.println(isemail);
 	}
 
 }

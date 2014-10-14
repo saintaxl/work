@@ -30,7 +30,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -52,27 +54,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.bnet.constant.USession;
+import com.sap.bnet.model.Customer;
 import com.sap.bnet.model.JSonObject;
 import com.sap.bnet.model.SubscriptionRequest;
 import com.sap.bnet.model.SubscriptionResponse;
 import com.sap.bnet.utils.JsonUtils;
-import com.sap.businessone.odata4j.consumer.ODataConsumer;
-import com.sap.businessone.odata4j.core.OComplexObject;
-import com.sap.businessone.odata4j.core.OComplexObjects;
-import com.sap.businessone.odata4j.core.OEntity;
-import com.sap.businessone.odata4j.core.OFunctionParameters;
-import com.sap.businessone.odata4j.core.OLink;
-import com.sap.businessone.odata4j.core.OObject;
-import com.sap.businessone.odata4j.core.OProperties;
-import com.sap.businessone.odata4j.core.OProperty;
-import com.sap.businessone.odata4j.core.OSimpleObject;
-import com.sap.businessone.odata4j.core.OSimpleObjects;
-import com.sap.businessone.odata4j.cxf.consumer.ODataCxfConsumer;
-import com.sap.businessone.odata4j.edm.EdmComplexType;
-import com.sap.businessone.odata4j.edm.EdmDataServices;
-import com.sap.businessone.odata4j.edm.EdmSimpleType;
-import com.sap.sbo.odatathinclient.ODataClientManager;
-import com.sap.sbo.odatathinclient.ODataClientManagerFactory;
 import com.sap.sbo.securestorage.ODCipher;
 
 /**
@@ -85,22 +71,14 @@ import com.sap.sbo.securestorage.ODCipher;
  */
 public class SldServiceImpl implements ISldService {
 	
-	private ODataClientManager odataManager;
-	
 	private String sldServiceToken;
 	
 	private String sldrooturl;
-	
-	private ODataConsumer consumer;
 	
 	private HttpClient client;
 	
 	public Logger logger = LoggerFactory.getLogger(SldServiceImpl.class);
 
-    public void setConsumer(ODataConsumer consumer) {
-        this.consumer = consumer;
-    }
-	
 	public void setSldServiceToken(String sldServiceToken) {
 		this.sldServiceToken = sldServiceToken;
 	}
@@ -108,10 +86,6 @@ public class SldServiceImpl implements ISldService {
 	public void setSldrooturl(String sldrooturl) {
 		this.sldrooturl = sldrooturl;
 	}
-
-	public void setOdataManager(ODataClientManager odataManager) {
-        this.odataManager = odataManager;
-    }
 
 	public boolean logonByServiceToken(HttpSession session) {
 		try{
@@ -135,34 +109,6 @@ public class SldServiceImpl implements ISldService {
 		}
 	}
 
-	public boolean isEmailUnique(String email) {
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("Email", email);
-		Boolean res = odataManager.invokeFunction("IsEmailUnique", parameters, Boolean.class);
-		return res;
-	}
-
-	public Integer checkUserPassword(SubscriptionRequest target) {
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		
-		String firstName = target.getFirstName();
-        String lastName = target.getLastName();
-        String email = target.getEmail();
-        String password = target.getPassword();
-        if (StringUtils.isNotEmpty(firstName)) {
-        	parameters.put("FirstName", firstName);
-        }
-        if (StringUtils.isNotEmpty(lastName)) {
-        	parameters.put("LastName", lastName);
-        }
-        if (StringUtils.isNotEmpty(email)) {
-        	parameters.put("Email", email);
-        }
-        parameters.put("Password", password);
-        
-        return odataManager.invokeAction("CheckUserPasswordReturnWithCode", parameters, int.class);
-	}
-	
 	public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request) {
 		try{
 			HttpPost postMethod = new HttpPost(sldrooturl+"CreateSubscriptionRequest");
@@ -198,37 +144,72 @@ public class SldServiceImpl implements ISldService {
 		}
 	}
 	
-	public void changeCustomer(String custName, String email,Integer licenseCount){
-		Enumerable<OEntity> customers = this.consumer.getEntities("Customers").filter("Name eq '"+custName+"' and Email eq '"+email+"'").execute();
-		if(customers.count() !=1){
-			return;
+	public void changeCustomer(String custName,Integer licenseCount){
+		try{
+			HttpGet getMethod = new HttpGet(sldrooturl+"Customers?$filter=Name%20eq%20'"+custName+"'");
+			getMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			getMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			HttpResponse response = this.client.execute(getMethod);
+			String reponseBody = EntityUtils.toString(response.getEntity(),"UTF-8");
+			logger.info("Call customer query response: ["+reponseBody+"].");
+			JSonObject object = JsonUtils.toObject(reponseBody, JSonObject.class);
+			List<Customer> customers = null;
+			if(null !=object.getD()){
+				customers = object.getD().getResults();
+			}
+			if(null==customers ||customers.size() !=1){
+				return;
+			}
+			Customer customer = customers.get(0);
+			Integer id = customer.getID();
+			HttpPut putMethod = new HttpPut(sldrooturl+"Customers("+id+")");
+			putMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			putMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			String requestBody = "{\"ID\":"+id+"," +
+					"\"MaxUsers\":\""+licenseCount+"\"}";
+			logger.info("Call customer update params: ["+requestBody+"].");
+			StringEntity stringEntity = new StringEntity(requestBody,ContentType.APPLICATION_JSON);
+			putMethod.setEntity(stringEntity);
+			HttpResponse putResponse = this.client.execute(putMethod);
+			String putReponseBody = EntityUtils.toString(putResponse.getEntity(),"UTF-8");
+			logger.info("Call customer update response: ["+putReponseBody+"].");
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
 		}
-		OEntity customer = customers.first();
-		OProperty<Integer> status = customer.getProperty("MaxUsers",Integer.class);
-		status.setValue(licenseCount);
-		
-		this.consumer.updateEntity(customer);
 	}
 
 	@Override
-	public void unsubscribeCustomer(String custName, String email) {
-		Enumerable<OEntity> customers = this.consumer.getEntities("Customers").filter("Name eq '"+custName+"' and Email eq '"+email+"'").execute();
-		if(customers.count() !=1){
-			return;
-		}
-		OEntity customer = customers.first();
-		OProperty<String> status = customer.getProperty("Status",String.class);
-		status.setValue("Offline");
-		
-		OProperty<Integer> id = customer.getProperty("ID",Integer.class);
-		Integer idValue = id.getValue();
-		this.consumer.updateEntity(customer);
-		
-		Enumerable<OEntity> tenants = this.consumer.getEntities("Tenants").filter("Customer/ID eq "+idValue).execute();
-		for(OEntity tenant : tenants){
-			OProperty<String> statusPro = tenant.getProperty("Status",String.class);
-			statusPro.setValue("Offline");
-			this.consumer.updateEntity(tenant);
+	public void unsubscribeCustomer(String custName) {
+		try{
+			HttpGet getMethod = new HttpGet(sldrooturl+"Customers?$filter=Name%20eq%20'"+custName+"'");
+			getMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			getMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			HttpResponse response = this.client.execute(getMethod);
+			String reponseBody = EntityUtils.toString(response.getEntity(),"UTF-8");
+			logger.info("Call customer query response: ["+reponseBody+"].");
+			JSonObject object = JsonUtils.toObject(reponseBody, JSonObject.class);
+			List<Customer> customers = null;
+			if(null !=object.getD()){
+				customers = object.getD().getResults();
+			}
+			if(null==customers ||customers.size() !=1){
+				return;
+			}
+			Customer customer = customers.get(0);
+			Integer id = customer.getID();
+			HttpPut putMethod = new HttpPut(sldrooturl+"Customers("+id+")");
+			putMethod.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
+			putMethod.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+			String requestBody = "{\"ID\":"+id+"," +
+					"\"Status\":\"Offline\"}";
+			logger.info("Call customer update params: ["+requestBody+"].");
+			StringEntity stringEntity = new StringEntity(requestBody,ContentType.APPLICATION_JSON);
+			putMethod.setEntity(stringEntity);
+			HttpResponse putResponse = this.client.execute(putMethod);
+			String putReponseBody = EntityUtils.toString(putResponse.getEntity(),"UTF-8");
+			logger.info("Call customer update response: ["+putReponseBody+"].");
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
 		}
 	}  
 	
@@ -255,12 +236,6 @@ public class SldServiceImpl implements ISldService {
         HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
 
 		client = new DefaultHttpClient(connManager,httpParams);
-        if (consumer == null) {
-            consumer = ODataCxfConsumer.create(this.addEndSlash(this.sldrooturl));
-        }
-        if (null == odataManager) {
-            odataManager = ODataClientManagerFactory.getODataClientManager(this.sldrooturl);
-        }
     }
 
     /**

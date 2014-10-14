@@ -30,8 +30,8 @@ public class PasswordValidator implements Validator{
 	}
 
 	public void validate(Object target, Errors errors) {
-		Integer status = sldServices.checkUserPassword((SubscriptionRequest)target);
-		System.out.println(status);
+		//Integer status = sldServices.checkUserPassword((SubscriptionRequest)target);
+		//System.out.println(status);
 	}
 
 }

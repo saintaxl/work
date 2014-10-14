@@ -43,44 +43,42 @@ public class ReceiveOrderController {
 	
 	@RequestMapping("/receiveOrder") 
 	public void receiveOrder(HttpServletRequest request,@ModelAttribute("order") OrderRequest order){
-//		if(StringUtils.isEmpty(order.getStreamingNo()) || StringUtils.isEmpty(order.getRand()) || StringUtils.isEmpty(order.getEncode())){
-//			logger.error("Order request is Null [StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
-//			return ;
-//		}
-//		
-//		logger.info("[StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
-//		
-//		PackageElement portalResultResponse = null;
-//		PackageElement portalRequestResponse = null;
-//		try {
-//			portalRequestResponse = remoteServices.getPortalRequest(order.getStreamingNo(), order.getRand(),order.getEncode());
-//			OPFlag opFlag = portalRequestResponse.getOpFlag();
-//			if(opFlag == opFlag.CUST_OPEN_PRODUCT || opFlag == opFlag.CUST_CHANGE_PRODUCT || opFlag == opFlag.CUST_UNSUBSCRIBE_PRODUCT ){
-//				portalResultResponse = remoteServices.queryCustomer(order.getStreamingNo(),portalRequestResponse);
-//			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
-//				portalResultResponse = remoteServices.queryUserInfo(order.getStreamingNo(),portalRequestResponse);
-//			}else if(opFlag == opFlag.USER_AUTHENTICATION){
-//				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequestResponse);
-//			}
-//		} catch (Exception e) {
-//			logger.error("RemoteServices Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
-//			HashMap modelMap = new HashMap();
-//			modelMap.put("errormessage", e);
-//			return ;
-//			//return new ModelAndView("error",modelMap);
-//		}
-//		
-//		try {
-//			handler.handleResult(request.getSession(), portalRequestResponse,portalResultResponse);
-//		} catch (Exception e) {
-//			logger.error("HandlerResolver Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
-//			HashMap modelMap = new HashMap();
-//			modelMap.put("errormessage", e);
-//			return ;
-//			//return new ModelAndView("error",modelMap);
-//		}
+		if(StringUtils.isEmpty(order.getStreamingNo()) || StringUtils.isEmpty(order.getRand()) || StringUtils.isEmpty(order.getEncode())){
+			logger.error("Order request is Null [StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
+			return ;
+		}
 		
-		handler.handleResult(request.getSession(), null,null);
+		logger.info("[StreamingNo:{},Rand:{},Encode:{}]",order.getStreamingNo(),order.getRand(),order.getEncode());
+		
+		PackageElement portalResultResponse = null;
+		PackageElement portalRequestResponse = null;
+		try {
+			portalRequestResponse = remoteServices.getPortalRequest(order.getStreamingNo(), order.getRand(),order.getEncode());
+			OPFlag opFlag = portalRequestResponse.getOpFlag();
+			if(opFlag == opFlag.CUST_OPEN_PRODUCT || opFlag == opFlag.CUST_CHANGE_PRODUCT || opFlag == opFlag.CUST_UNSUBSCRIBE_PRODUCT ){
+				portalResultResponse = remoteServices.queryCustomer(order.getStreamingNo(),portalRequestResponse);
+			}else if(opFlag == opFlag.USER_BOUND_PRODUCT || opFlag == opFlag.USER_CHANGE_PRODUCT || opFlag == opFlag.USER_UNBOUND_PRODUCT){
+				portalResultResponse = remoteServices.queryUserInfo(order.getStreamingNo(),portalRequestResponse);
+			}else if(opFlag == opFlag.USER_AUTHENTICATION){
+				portalResultResponse = remoteServices.getAuthentication(order.getStreamingNo(),portalRequestResponse);
+			}
+		} catch (Exception e) {
+			logger.error("RemoteServices Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
+			HashMap modelMap = new HashMap();
+			modelMap.put("errormessage", e);
+			return ;
+			//return new ModelAndView("error",modelMap);
+		}
+		
+		try {
+			handler.handleResult(request.getSession(), portalRequestResponse,portalResultResponse);
+		} catch (Exception e) {
+			logger.error("HandlerResolver Services error {} the streamingNo {}",e.getMessage() ,order.getStreamingNo());
+			HashMap modelMap = new HashMap();
+			modelMap.put("errormessage", e);
+			return ;
+			//return new ModelAndView("error",modelMap);
+		}
 		
 		return ;
 	}

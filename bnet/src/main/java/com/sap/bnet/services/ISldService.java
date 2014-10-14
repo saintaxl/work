@@ -21,14 +21,10 @@ public interface ISldService {
 	
     public boolean logonByServiceToken(HttpSession session);
     
-    public boolean isEmailUnique(String email);
-    
-    public Integer checkUserPassword(SubscriptionRequest target);
-    
     public SubscriptionResponse createSubscriptionRequest(SubscriptionRequest request);
     
-    public void changeCustomer(String custName, String email,Integer licenseCount);
+    public void changeCustomer(String custName,Integer licenseCount);
     
-    public void unsubscribeCustomer(String custName, String email);
+    public void unsubscribeCustomer(String custName);
     
 }

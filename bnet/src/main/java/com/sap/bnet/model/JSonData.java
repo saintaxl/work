@@ -1,6 +1,8 @@
 package com.sap.bnet.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class JSonData implements Serializable {
@@ -12,6 +14,8 @@ public class JSonData implements Serializable {
 	private Boolean LogonByServiceToken;
 	
 	private SubscriptionResponse CreateSubscriptionRequest;
+	
+	private List<Customer> results =  new ArrayList<Customer>();
 
 	public Boolean isLogonByServiceToken() {
 		return LogonByServiceToken;
@@ -27,5 +31,13 @@ public class JSonData implements Serializable {
 
 	public void setCreateSubscriptionRequest(SubscriptionResponse createSubscriptionRequest) {
 		CreateSubscriptionRequest = createSubscriptionRequest;
+	}
+
+	public List<Customer> getResults() {
+		return results;
+	}
+
+	public void setResults(List<Customer> results) {
+		this.results = results;
 	}
 }

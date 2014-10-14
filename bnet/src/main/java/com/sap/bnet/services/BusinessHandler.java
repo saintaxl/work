@@ -36,8 +36,6 @@ public class BusinessHandler implements IBusinessHandler {
 			sldServices.logonByServiceToken(session);
 		}
 		
-		openProduction4Cust(portalResultResponse);
-		
 		OPFlag opFlag = portalRequestResponse.getOpFlag();
 		try {
 			switch (opFlag) {
@@ -77,24 +75,20 @@ public class BusinessHandler implements IBusinessHandler {
 
 	private void openProduction4Cust(PackageElement dataPackage) {
 		SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-		subscriptionRequest.setCompany("Demo");
-		subscriptionRequest.setEmail("demo@sap.com");
-//		subscriptionRequest.setCompany(dataPackage.getCustName());
-//		
-//		Product email = getEmail(dataPackage);
-//		subscriptionRequest.setEmail(email.getProductValue());
+		subscriptionRequest.setCompany(dataPackage.getCustName());
+		
+		Product email = getEmail(dataPackage);
+		subscriptionRequest.setEmail(email.getProductValue());
 		sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
 	
 	private void changeProduction4Cust(PackageElement dataPackage) {
-		Product email = getEmail(dataPackage);
 		Product license = getLicense(dataPackage);
-		sldServices.changeCustomer(dataPackage.getCustName(), email.getProductValue(),Integer.valueOf(license.getProductValue()));
+		sldServices.changeCustomer(dataPackage.getCustName(),Integer.valueOf(license.getProductValue()));
 	}
 
 	private void unsubscribeProduction4Cust(PackageElement dataPackage) {
-		Product email = getEmail(dataPackage);
-		sldServices.unsubscribeCustomer(dataPackage.getCustName(), email.getProductValue());
+		sldServices.unsubscribeCustomer(dataPackage.getCustName());
 	}
 
 	private Product getEmail(PackageElement dataPackage) {

@@ -27,7 +27,6 @@
 	<bean id="sldServices" class="com.sap.bnet.services.SldServiceImpl">
 		<property name="sldServiceToken" value="${servicetoken}"/>
 		<property name="sldrooturl" value="${sldrooturl}"/>
-<!-- 		<property name="odataManager" ref="odataClientManagerFactory"/> -->
 	</bean>
 	
 	<!-- <bean class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor"/>
