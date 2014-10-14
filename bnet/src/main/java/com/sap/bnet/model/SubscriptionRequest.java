@@ -35,6 +35,8 @@ public class SubscriptionRequest implements Serializable {
 	
 	private String country = "CN";
 	
+	private Integer license = 10;
+	
 	public String getCountry() {
 		return country;
 	}
@@ -115,6 +117,14 @@ public class SubscriptionRequest implements Serializable {
 
 	public void setCaptcha(String captcha) {
 		this.captcha = captcha;
+	}
+
+	public Integer getLicense() {
+		return license;
+	}
+
+	public void setLicense(Integer license) {
+		this.license = license;
 	}
 
 }

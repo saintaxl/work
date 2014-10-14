@@ -35,6 +35,7 @@ public class BusinessHandler implements IBusinessHandler {
 		if(session.getAttribute(USession.USER_ID) == null){
 			sldServices.logonByServiceToken(session);
 		}
+		openProduction4Cust(portalResultResponse);
 		
 		OPFlag opFlag = portalRequestResponse.getOpFlag();
 		try {
@@ -79,6 +80,13 @@ public class BusinessHandler implements IBusinessHandler {
 		
 		Product email = getEmail(dataPackage);
 		subscriptionRequest.setEmail(email.getProductValue());
+		Product license = getLicense(dataPackage);
+		subscriptionRequest.setLicense(Integer.valueOf(license.getProductValue()));
+		
+//		subscriptionRequest.setCompany("Demo6");
+//		subscriptionRequest.setEmail("Demo6@sap.com");
+//		subscriptionRequest.setPassword("Initial6!");
+//		subscriptionRequest.setLicense(5);
 		sldServices.createSubscriptionRequest(subscriptionRequest);
 	}
 	

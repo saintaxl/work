@@ -3,33 +3,21 @@
  */
 package com.sap.bnet.services;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -42,14 +30,10 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.JsonSerializable;
-import org.core4j.Enumerable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,9 +122,18 @@ public class SldServiceImpl implements ISldService {
 			String reponseBody = EntityUtils.toString(response.getEntity(),"UTF-8");
 			logger.info("Call CreateSubscriptionRequest response: ["+reponseBody+"].");
 			JSonObject object = JsonUtils.toObject(reponseBody, JSonObject.class);
-			return object.getD().getCreateSubscriptionRequest();
+			SubscriptionResponse createSubscriptionRequest = object.getD().getCreateSubscriptionRequest();
+			monitoringTask(createSubscriptionRequest,company,request.getLicense());
+			return createSubscriptionRequest;
 		}catch(Exception e){
 			throw new RuntimeException(e);
+		}
+	}
+	
+	private void monitoringTask(SubscriptionResponse subscriptionResponse,String customerName,Integer license){
+		if(subscriptionResponse.getTaskId() !=-1){
+				Thread thr = new TaskMonitorThread(subscriptionResponse.getTaskId(),client,customerName,license,this.sldrooturl);
+				thr.start();
 		}
 	}
 	
